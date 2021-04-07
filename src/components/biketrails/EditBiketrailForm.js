@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
 import * as api from '../../api'
-import {LogginContext,MessageContext} from '../../context/biketrails.context'
+import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
 
 
 // temporary hardcoded, later make db cluster
@@ -52,6 +52,7 @@ export default function EditBiketrailForm(props){
     const {biketrailId,name,description,location,category,gpxFileName,setAction,setStatus} = props;
     const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
     const [message,setMessage] = useContext(MessageContext)
+    const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
     const bt = {name,description,location,category}
 
     const [biketrailData,setBiketrailData] = useState(bt)
@@ -77,60 +78,30 @@ export default function EditBiketrailForm(props){
                  biketrailData[name] && formData.append(name,biketrailData[name])
              }
              gpxFile && formData.append('gpxFile',gpxFile)
+             
+             dispatch({type:'UPDATEBIKETRAIL',biketrailId,formData,setMessage,setStatus,setAction,setLoggedInUser,history})
 
-             api.updateBikeTrail(biketrailId,formData)
-             .then(response => {
-                if(response.status === 200){
-                    console.log(response.data)
-                    setStatus('success')
-                    setMessage(response.data.message)  
-                    setAction(null)
-                }
-             })
-             .catch(err => {
-                if(err.response){
-                    console.log(err.response.data)
-                    if(err.response.data.name === "TokenExpiredError"){
-                        setLoggedInUser(false)
-                        localStorage.clear()
-                        setMessage('Your session expired, please login again !')
-                        history.push('/')
-                    }
-                }
-             })
+            //  api.updateBikeTrail(biketrailId,formData)
+            //  .then(response => {
+            //     if(response.status === 200){
+            //         console.log(response.data)
+            //         setStatus('success')
+            //         setMessage(response.data.message)  
+            //         setAction(null)
+            //     }
+            //  })
+            //  .catch(err => {
+            //     if(err.response){
+            //         console.log(err.response.data)
+            //         if(err.response.data.name === "TokenExpiredError"){
+            //             setLoggedInUser(false)
+            //             localStorage.clear()
+            //             setMessage('Your session expired, please login again !')
+            //             history.push('/')
+            //         }
+            //     }
+            //  })
 
-        // try{
-        //     console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
-        //     var formData = new FormData()
-        //     for(let name in biketrailData){
-        //         biketrailData[name] && formData.append(name,biketrailData[name])
-        //     }
-        //     gpxFile && formData.append('gpxFile',gpxFile)
-        //     
-        //     const updateBiketrail = async (formData) =>{
-        //         const response = await api.updateBikeTrail(biketrailId,formData)
-        //         if(response.status === 200){
-        //             console.log(response.data)
-        //             setStatus('success')
-        //             setMessage(response.data.message)  
-        //             setAction(null)
-        //         }
-        //     }
-        //     // call the async function
-        //     updateBiketrail(formData)
-// 
-        // } catch (err){
-        //     console.log(err)
-        //     if(err.response){
-        //         console.log(err.response.data)
-        //         if(err.response.data.name === "TokenExpiredError"){
-        //             setLoggedInUser(false)
-        //             localStorage.clear()
-        //             setMessage('Your session expired, please login again !')
-        //             history.push('/')
-        //         }
-        //     }
-        // }
     }
 
     return (
