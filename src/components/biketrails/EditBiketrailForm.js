@@ -80,28 +80,6 @@ export default function EditBiketrailForm(props){
              gpxFile && formData.append('gpxFile',gpxFile)
              
              dispatch({type:'UPDATEBIKETRAIL',biketrailId,formData,setMessage,setStatus,setAction,setLoggedInUser,history})
-
-            //  api.updateBikeTrail(biketrailId,formData)
-            //  .then(response => {
-            //     if(response.status === 200){
-            //         console.log(response.data)
-            //         setStatus('success')
-            //         setMessage(response.data.message)  
-            //         setAction(null)
-            //     }
-            //  })
-            //  .catch(err => {
-            //     if(err.response){
-            //         console.log(err.response.data)
-            //         if(err.response.data.name === "TokenExpiredError"){
-            //             setLoggedInUser(false)
-            //             localStorage.clear()
-            //             setMessage('Your session expired, please login again !')
-            //             history.push('/')
-            //         }
-            //     }
-            //  })
-
     }
 
     return (

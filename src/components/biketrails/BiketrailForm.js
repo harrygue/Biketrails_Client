@@ -82,34 +82,6 @@ export default function BiketrailForm(props){
 
         dispatch({type:'CREATEBIKETRAIL',formData,setMessage,setOpen,setLoggedInUser,history})
     }
-        // try{
-        //     console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
-        //     var formData = new FormData()
-        //     for(let name in biketrailData){
-        //         formData.append(name,biketrailData[name])
-        //     }
-        //     formData.append('gpxFile',gpxFile)
-        //     // dispatch({type:'CREATEBIKETRAIL',formData,setMessage,setOpen})
-        //     const createBiketrail = async (formData) =>{
-        //         const response = await api.createBikeTrail(formData)
-        //         if(response.status === 200){
-        //             console.log(response.data.message)
-        //             setMessage(response.data.message)  
-        //             setOpen(false)               
-        //         } else {
-        //             setMessage(response.data.message)
-        //             setOpen(false)
-        //         }
-        //     }
-        //     // call the async function
-        //     createBiketrail(formData)
-// 
-        // } catch (err){
-        //     console.log(err)
-        //     setMessage(err.message)
-        //     setOpen(false)
-        // }
-    // }
     
     // add entype for file upload
     return (
