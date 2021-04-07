@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
 import * as api from '../../api'
 import Biketrails from './Biketrails';
-import {MessageContext} from '../../context/biketrails.context'
+import {useHistory} from 'react-router-dom'
+import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
+
 
 // temporary hardcoded, later make db cluster
 const categories = [{value:'All',label:'All'},
@@ -48,8 +50,10 @@ const emptyBT = {
 
 export default function BiketrailForm(props){
     const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    const [biketrail,dispatch] = useContext(BiketrailContext)
     const classes = useStyles()
-
+    const history = useHistory()
     const [biketrailData,setBiketrailData] = useState(emptyBT)
     const [gpxFile,setGpxFile] = useState({})
     const [open,setOpen] = useState(true)
@@ -69,33 +73,43 @@ export default function BiketrailForm(props){
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        try{
-            console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
-            var formData = new FormData()
-            for(let name in biketrailData){
-                formData.append(name,biketrailData[name])
-            }
-            formData.append('gpxFile',gpxFile)
-            const sendToServer = async (formData) =>{
-                const response = await api.createBikeTrail(formData)
-                if(response.status === 200){
-                    console.log(response.data.message)
-                    setMessage(response.data.message)  
-                    setOpen(false)               
-                } else {
-                    setMessage(response.data.message)
-                    setOpen(false)
-                }
-            }
-            // call the async function
-            sendToServer(formData)
-
-        } catch (err){
-            console.log(err)
-            setMessage(err.message)
-            setOpen(false)
+        console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+        var formData = new FormData()
+        for(let name in biketrailData){
+            formData.append(name,biketrailData[name])
         }
+        formData.append('gpxFile',gpxFile)
+
+        dispatch({type:'CREATEBIKETRAIL',formData,setMessage,setOpen,setLoggedInUser,history})
     }
+        // try{
+        //     console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+        //     var formData = new FormData()
+        //     for(let name in biketrailData){
+        //         formData.append(name,biketrailData[name])
+        //     }
+        //     formData.append('gpxFile',gpxFile)
+        //     // dispatch({type:'CREATEBIKETRAIL',formData,setMessage,setOpen})
+        //     const createBiketrail = async (formData) =>{
+        //         const response = await api.createBikeTrail(formData)
+        //         if(response.status === 200){
+        //             console.log(response.data.message)
+        //             setMessage(response.data.message)  
+        //             setOpen(false)               
+        //         } else {
+        //             setMessage(response.data.message)
+        //             setOpen(false)
+        //         }
+        //     }
+        //     // call the async function
+        //     createBiketrail(formData)
+// 
+        // } catch (err){
+        //     console.log(err)
+        //     setMessage(err.message)
+        //     setOpen(false)
+        // }
+    // }
     
     // add entype for file upload
     return (
