@@ -15,7 +15,9 @@ export const biketrailReducer = (state,action) => {
             updateBiketrail(action.biketrailId,action.formData,action.setMessage,action.setStatus,action.setAction,action.setLoggedInUser,action.history)
             return {message:'Biketrail updated'}
         case 'DELETEBIKETRAIL':
-            return null
+            console.log(`DELETEBIKETRAIL`)
+            deleteBikeTrail(action.id,action.setMessage,action.setLoggedInUser,action.history)
+            return {message:'Biketrail deleted'}
         default:
             return state
     }
@@ -64,5 +66,28 @@ const updateBiketrail = (id,data,setMessage,setStatus,setAction,setLoggedInUser,
                history.push('/')
            }
        }
+    })
+}
+
+const deleteBikeTrail = (id,setMessage,setLoggedInUser,history) => {
+    api.deleteBikeTrail(id)
+    .then(response => {
+      console.log(JSON.stringify(response))
+      if(response.status === 200){
+        console.log(response.data.message)
+        setMessage(response.data.message)
+        history.push('/')
+      }
+    })
+    .catch(err => {
+        if(err.response){
+            console.log(err.response.data)
+            if(err.response.data.name === "TokenExpiredError"){
+                setLoggedInUser(false)
+                localStorage.clear()
+                setMessage('Your session expired, please login again !')
+                history.push('/')
+            }
+        }
     })
 }

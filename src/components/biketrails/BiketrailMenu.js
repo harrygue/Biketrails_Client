@@ -1,10 +1,11 @@
 import React,{useContext} from 'react';
+import {useHistory} from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import * as api from '../../api'
-import {MessageContext} from '../../context/biketrails.context'
+import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
 
 const options = [
   'Edit',
@@ -17,7 +18,10 @@ const ITEM_HEIGHT = 48;
 
 export default function BiketrailMenu({id,selectAction,setAction}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const history = useHistory()
+  const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
   const [message,setMessage] = useContext(MessageContext)
+  const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -32,14 +36,7 @@ export default function BiketrailMenu({id,selectAction,setAction}) {
 
       if(option.target.firstChild.data === 'Delete'){
         alert('Do you really want to delete this item ?')
-        api.deleteBikeTrail(id)
-        .then(response => {
-          console.log(JSON.stringify(response))
-          if(response.status === 200){
-            console.log(response.data.message)
-            setMessage(response.data.message)
-          }
-        })
+        dispatch({type:'DELETEBIKETRAIL',id,setMessage,history})
       }
     } else {
       setAction(null)
