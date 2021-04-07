@@ -1,0 +1,194 @@
+import React,{useContext, useState} from 'react'
+import { makeStyles } from '@material-ui/core/styles';
+import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
+import * as api from '../../api'
+import Biketrails from './Biketrails';
+import {MessageContext} from '../../context/biketrails.context'
+
+// temporary hardcoded, later make db cluster
+const categories = [{value:'All',label:'All'},
+                    {value:'Mountain Bike',label:'Mountain Bike'},
+                    {value:'Road Bike / Strassenrad',label:'Road Bike / Strassenrad'},
+                    {value:'Hike / Wanderung',label:'Hike / Wanderung'},
+                    {value:'Skitour',label:'Skitour'},
+                    {value:'Schneeschuh Tour',label:'Schneeschuh Tour'},
+                    {value:'Jogging',label:'Jogging'},
+                    {value:'Walking',label:'Walking'}];
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        '& .MuiTextField-root': {
+          margin: theme.spacing(1),
+        },
+    },
+    paper: {
+      padding: theme.spacing(2),
+    },
+    form: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    },
+    fileInput: {
+        width: '97%',
+        margin: '10px 0',
+    },
+    buttonSubmit: {
+        marginBottom: 10,
+    },
+}))
+
+const emptyBT = {
+    name: '',
+    description:'',
+    location:'',
+    category:'',
+    gpxFile:''
+}
+
+export default function BiketrailForm(props){
+    const [message,setMessage] = useContext(MessageContext)
+    const classes = useStyles()
+
+    const [biketrailData,setBiketrailData] = useState(emptyBT)
+    const [gpxFile,setGpxFile] = useState({})
+    const [open,setOpen] = useState(true)
+
+
+    const handleChange = (e) => {
+        if(e.target.name !== 'gpx'){
+            console.log(e.target.name)
+            setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
+        } else {
+            console.log(e.target.name)
+            console.log(e.target.files[0])
+            setGpxFile(e.target.files[0])
+        }
+
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        try{
+            console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+            var formData = new FormData()
+            for(let name in biketrailData){
+                formData.append(name,biketrailData[name])
+            }
+            formData.append('gpxFile',gpxFile)
+            const sendToServer = async (formData) =>{
+                const response = await api.createBikeTrail(formData)
+                if(response.status === 200){
+                    console.log(response.data.message)
+                    setMessage(response.data.message)  
+                    setOpen(false)               
+                } else {
+                    setMessage(response.data.message)
+                    setOpen(false)
+                }
+            }
+            // call the async function
+            sendToServer(formData)
+
+        } catch (err){
+            console.log(err)
+            setMessage(err.message)
+            setOpen(false)
+        }
+    }
+    
+    // add entype for file upload
+    return (
+        <>
+            {open ? <Paper className={classes.paper}>
+                <form
+                    encType="multipart/form-data"
+                    autoComplete='off'
+                    noValidate 
+                    className={`${classes.root} ${classes.form}`}
+                    onSubmit={handleSubmit}
+                >
+                    <Typography variant='h6'>Create a Biketrail</Typography>
+                    <TextField 
+                        name='name'
+                        label='Title'    
+                        variant='outlined'
+                        fullWidth
+                        value={biketrailData.name}
+                        onChange={handleChange}
+                    />
+                    
+                    <TextField 
+                        name='description'
+                        label='Description'
+                        variant='outlined'
+                        fullWidth
+                        value={biketrailData.description}
+                        onChange={handleChange}
+                    />
+                    <TextField 
+                        name='location'
+                        label='Location'
+                        variant='outlined'
+                        fullWidth
+                        value={biketrailData.location}
+                        onChange={handleChange}
+                    />
+                    <div style={{width:'100%',display:'flex',flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+                    {/* select field */}
+                    <TextField
+                        id="outlined-select-category"
+                        name='category'
+                        select
+                        label="Select"
+                        value={biketrailData.category}
+                        onChange={handleChange}
+                        helperText="Please select the category"
+                        variant="outlined"
+                        style={{width:'50%'}}
+                    >
+                        {categories.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                    </TextField>
+                    {/* file input */}
+                    <input
+                        style={{ display: "none" }}
+                        id="contained-button-file"
+                        type="file"
+                        name='gpx'
+                        accept="gpx/*"
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="contained-button-file">
+                        <Button variant="contained" color="secondary" component="span">
+                            GPX File Upload
+                        </Button>
+                    </label>
+                    <Button
+                        className={classes.buttonSubmit}
+                        variant='contained'
+                        type='submit'
+                        color='primary'
+                        size='large'
+                    >
+                        Submit
+                    </Button>
+                    <Button
+                        variant='outlined'
+                        size='small'
+                        color='secondary'
+                        onClick={() => {setBiketrailData(emptyBT) }}
+                    >
+                        Clear
+                    </Button>
+                    </div>
+                </form>
+            </Paper> : 
+            <Biketrails />}
+
+        </>
+    )
+}

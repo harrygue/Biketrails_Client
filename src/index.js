@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from "react-router-dom";
+import 'leaflet/dist/leaflet.css'
+import {BiketrailsProvider} from './context/biketrails.context'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+    <BiketrailsProvider>
+      <App />
+    </BiketrailsProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
