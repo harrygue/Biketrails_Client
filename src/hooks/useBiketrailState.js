@@ -1,7 +1,8 @@
 import {useState,useEffect} from 'react'
 import * as api from '../api'
 
-export const useBiketrailState = (id,status,setStatus) => {
+// status, setStatus
+export const useBiketrailState = (id,message) => {
     const [biketrail,setBiketrail] = useState([])
     useEffect(() => {
         console.log('RUN USE BIKETRAIL EFFECT')
@@ -11,7 +12,7 @@ export const useBiketrailState = (id,status,setStatus) => {
                 if(response.status === 200){
                     console.log(response.data)
                     setBiketrail(response.data.biketrail)
-                    console.log('inside use effect: Status',status)
+                    console.log('inside use effect: Message',message)
                 }
             } catch (error){
                 console.log(error)
@@ -24,6 +25,6 @@ export const useBiketrailState = (id,status,setStatus) => {
         //     setStatus(null)
         //     console.log('useBiketrailState CALLBACK, Status: ',status)
         // }
-    },[id,status])
+    },[id,message])
     return [biketrail,setBiketrail]
 }

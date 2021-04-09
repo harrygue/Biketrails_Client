@@ -1,7 +1,9 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
+import {useHistory} from 'react-router-dom'
 import * as api from '../../api'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
+import {CommentContext,MessageContext,LogginContext} from '../../context/biketrails.context'
 
 
 const useStyles = makeStyles(theme => ({
@@ -25,43 +27,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function CommentForm(props){
     const classes = useStyles()
+    const history = useHistory()
     const {biketrailId,commentId=null,setAction,setCommentAction,setStatus,text='write a comment'} = props;
-    const [comment,setComment] = useState(text)
+    const [commentData,setCommentData] = useState(text)
+    const [comment,dispatch] = useContext(CommentContext)
+    const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
 
     const handleChange = (e) => {
-        setComment(e.target.value)
+        setCommentData(e.target.value)
     }
 
     const handleSubmit = (e) => {
         console.log('hit handleSubmit')
-        console.log(comment)
+        console.log(commentData)
         e.preventDefault()
 
-        // ----------------------- CREATE COMMENT ---------------------------
-        const createComment = async ( bt_id, data) => {
-            const response = await api.createComment(bt_id,{'comment':data})
-            console.log(response)
-            if (response.status === 201){
-                console.log('Response: ',response)
-                setAction(null)
-                // setMessage(response.data.message)
-                setStatus("success")
-            }
-        }
-
-        // ------------------ UPDATE COMMENT -----------------------
-        const updateComment = async (bt_id,commentId,data) => {
-            const response = await api.updateComment(bt_id,commentId,{'comment':data})
-
-            if(response.status === 200){
-                console.log('Response: ',response.data)
-                setCommentAction(null)
-                // setMessage(response.data.message)
-                setStatus("success")
-            }
-        }
-        console.log(commentId)
-        commentId ? updateComment(biketrailId,commentId,comment) : createComment(biketrailId,comment)
+        commentId ? 
+            dispatch({type:'UPDATECOMMENT',biketrailId,commentId,commentData,setCommentAction,setMessage,setLoggedInUser,history}) : 
+            dispatch({type:'CREATECOMMENT',biketrailId,commentData,setAction,setMessage,setLoggedInUser,history})
     }
 
     return(
@@ -80,7 +64,7 @@ export default function CommentForm(props){
                     label='New Comment'
                     variant='outlined'
                     fullWidth
-                    value={comment}
+                    value={commentData}
                     onChange={handleChange}
                 />
                 <Button

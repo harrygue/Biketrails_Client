@@ -49,7 +49,7 @@ export default function Comment(props){
                 </div>
             </CardContent>
             <CardActions>
-                {(comment.author.id === loggedInUser._id || loggedInUser.isAdmin) && <CommentMenu 
+                {loggedInUser && (comment.author.id === loggedInUser._id || loggedInUser.isAdmin) && <CommentMenu 
                     biketrailId={biketrailId}
                     commentId={comment._id}
                     selectCommentAction={selectCommentAction}

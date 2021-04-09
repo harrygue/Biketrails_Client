@@ -5,9 +5,12 @@ import {useLoggedInUser} from '../hooks/useLoggedInUser'
 import * as api from '../api'
 import {biketrailReducer} from '../reducers/biketrailReducer'
 import {useBiketrailReducer} from '../hooks/useBiketrailReducer'
+import {commentReducer} from '../reducers/commentReducer'
+import {useCommentReducer} from '../hooks/useCommentReducer'
 
 export const BiketrailsContext = createContext([[],() => {}]);
 export const BiketrailContext = createContext([[],() => {}]);
+export const CommentContext = createContext([[],() => {}]);
 export const LogginContext = createContext([[],() => {}])
 export const MessageContext = createContext([[],() => {}])
 
@@ -20,15 +23,18 @@ export function BiketrailsProvider(props){
     const [loggedInUser,setLoggedInUser] = useLoggedInUser()
     const [message,setMessage] = useState()
     const [biketrail,dispatch] = useBiketrailReducer(biketrailReducer)
+    const [comment,dispatchComment] = useCommentReducer(commentReducer)
 
     
     return(
         <BiketrailContext.Provider value={[biketrail,dispatch]}>
-            <LogginContext.Provider value={[loggedInUser,setLoggedInUser]}>
-                <MessageContext.Provider value={[message,setMessage]}>
-                    {props.children}
-                </MessageContext.Provider>
-            </LogginContext.Provider>
+            <CommentContext.Provider value={[comment,dispatchComment]}>
+                <LogginContext.Provider value={[loggedInUser,setLoggedInUser]}>
+                    <MessageContext.Provider value={[message,setMessage]}>
+                        {props.children}
+                    </MessageContext.Provider>
+                </LogginContext.Provider>
+            </CommentContext.Provider>
         </BiketrailContext.Provider>
     )
 
