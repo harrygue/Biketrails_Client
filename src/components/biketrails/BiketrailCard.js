@@ -3,6 +3,7 @@ import {Card,CardActions,CardContent,CardMedia,Typography} from '@material-ui/co
 import { makeStyles } from '@material-ui/core/styles';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import {Link} from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid';
 
 const useStyles = makeStyles(theme => ({
     media: {
@@ -58,9 +59,10 @@ const useStyles = makeStyles(theme => ({
 export default function BikeTrailCard(props){
     const {name,id,author,createdAt,description,image} = props;
     const classes = useStyles();
+    // console.log('RENDER BIKETRAIL CARD ',id)
 
     return (
-        <Card className={classes.card}>
+        <Card key={uuidv4()} className={classes.card}>
             <CardMedia 
                 className={classes.media}
                 image={image ? image : ""}

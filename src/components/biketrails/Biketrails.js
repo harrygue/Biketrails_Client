@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme =>({
 export default function Biketrails(props){
     const [message,setMessage] = useContext(MessageContext);
     const classes = useStyles();
-    const [biketrails] = useAllBiketrailState();
+    const [biketrails,setBiketrails] = useAllBiketrailState(message,setMessage);
     // const biketrails = useContext(BiketrailsContext)
     console.log(biketrails)
     console.log('MESSAGE: ',message)

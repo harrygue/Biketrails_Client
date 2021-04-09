@@ -40,7 +40,7 @@ export default function BiketrailsAppBar(props){
             <Typography className={classes.heading} variant='h2' align='center'>
               <NavLink to='/biketrails' style={{textDecoration: 'none'}}>Bike Trails</NavLink>
             </Typography>
-            <NavLink to='/createBiketrail' style={{fontSize:'20px'}}>Create Biketrail</NavLink>
+            {/*<NavLink to='/createBiketrail' style={{fontSize:'20px'}}>Create Biketrail</NavLink>*/}
             <BiketrailsAppBarMenu />
         </AppBar>
     )

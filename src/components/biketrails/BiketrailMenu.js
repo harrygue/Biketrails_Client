@@ -36,7 +36,7 @@ export default function BiketrailMenu({id,selectAction,setAction}) {
 
       if(option.target.firstChild.data === 'Delete'){
         alert('Do you really want to delete this item ?')
-        dispatch({type:'DELETEBIKETRAIL',id,setMessage,history})
+        dispatch({type:'DELETEBIKETRAIL',id,setMessage,setAction,history})
       }
     } else {
       setAction(null)

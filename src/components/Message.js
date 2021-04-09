@@ -10,7 +10,7 @@ export default function Message(){
         <Grid item xs={12} sm={12} key={uuidv4()}>
           {message && <Typography variant='h3' style={{color:'green'}}>{message}</Typography>}
           {message && setTimeout(() => {
-              // setMessage(null)
+              setMessage(null)
           },3000)}
         </Grid>
     )

@@ -1,7 +1,7 @@
 import {useState,useEffect} from 'react'
 import * as api from '../api'
 
-export const useAllBiketrailState = () => {
+export const useAllBiketrailState = (message,setMessage) => {
 
     const [biketrails, setBiketrails] = useState()
     useEffect(() => {
@@ -14,11 +14,11 @@ export const useAllBiketrailState = () => {
             }
             fetchBiketrails()
             console.log("RUN USEEFFECT IN useAllBiketrailState")
-            console.log(biketrails)
+            console.log(message,biketrails)
         } catch(error){
             console.log(error)
         }
-    },[])
+    },[message])
 
 
     return [biketrails,setBiketrails]

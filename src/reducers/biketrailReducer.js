@@ -5,7 +5,8 @@ export const biketrailReducer = (state,action) => {
     console.log('biketrailReducer')
     switch(action.type){
         case 'GETBIKETRAIL':
-            return null //{biketrail: useBiketrailState(id,status,setStatus)}
+            getBiketrail(action.id,action.setBiketrail,action.setMessage)
+            return null
         case 'CREATEBIKETRAIL':
             console.log('CREATEBIKETRAIL:')
             createBiketrail(action.formData,action.setMessage,action.setOpen,action.setLoggedInUser,action.history)
@@ -16,11 +17,26 @@ export const biketrailReducer = (state,action) => {
             return {message:'Biketrail updated'}
         case 'DELETEBIKETRAIL':
             console.log(`DELETEBIKETRAIL`)
-            deleteBikeTrail(action.id,action.setMessage,action.setLoggedInUser,action.history)
+            deleteBikeTrail(action.id,action.setMessage,action.setLoggedInUser,action.setAction,action.history)
             return {message:'Biketrail deleted'}
         default:
             return state
     }
+}
+
+const getBiketrail = (id,setMessage,setBiketrail) => {
+    console.log('getBiketrail in biketrailReducer.js')
+    api.getBikeTrail(id)
+    .then(response => {
+        if(response.status === 200){
+            console.log(response.data.biketrail)
+            setBiketrail(response.data.biketrail)
+        }
+    })
+    .catch(error => {
+        console.log(error)
+        setMessage('Something went wrong, cannot render the biketrail')
+    })
 }
 
 const createBiketrail = (data,setMessage,setOpen,setLoggedInUser,history) => {
@@ -69,13 +85,14 @@ const updateBiketrail = (id,data,setMessage,setStatus,setAction,setLoggedInUser,
     })
 }
 
-const deleteBikeTrail = (id,setMessage,setLoggedInUser,history) => {
+const deleteBikeTrail = (id,setMessage,setLoggedInUser,setAction,history) => {
     api.deleteBikeTrail(id)
     .then(response => {
       console.log(JSON.stringify(response))
       if(response.status === 200){
         console.log(response.data.message)
         setMessage(response.data.message)
+        setAction(response.data.message)
         history.push('/')
       }
     })

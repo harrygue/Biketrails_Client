@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react';
+import React,{useState,useContext, useEffect} from 'react';
 
 import Comment from '../Comments/Comment';
 import CommentForm from '../Comments/CommentForm';
@@ -15,7 +15,7 @@ import {useBiketrailState} from '../../hooks/useBiketrailState'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
 import {PlotMapLeaflet} from '../Plots'
-import {LogginContext,MessageContext} from '../../context/biketrails.context'
+import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
 import Message from '../Message'
 
 
@@ -72,6 +72,8 @@ export default function BikeTrail(props){
     const [status,setStatus] = useState(null)
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
+
+    // const [biketrail,dispatch] = useContext(BiketrailContext)
     const [biketrail,setBiketrail] = useBiketrailState(id,status,setStatus)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
@@ -84,7 +86,7 @@ export default function BikeTrail(props){
     // console.log(biketrail.comments)
     setMessage('')
     console.log('MESSAGE: ',message)
-    console.log('GPX Filename: ',biketrail.gpxFileName)
+    // console.log('GPX Filename: ',biketrail.gpxFileName)
 
     const handleExpandClick = () => {
       setExpanded(!expanded);
