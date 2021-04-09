@@ -1,10 +1,11 @@
 import React,{useState,useContext} from 'react';
+import {useHistory} from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import * as api from '../../api'
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,LogginContext,CommentContext} from '../../context/biketrails.context'
 
 const options = [
   'Edit Comment',
@@ -14,7 +15,10 @@ const options = [
 const ITEM_HEIGHT = 48;
 
 export default function CommentMenu({biketrailId,commentId,setCommentAction,setStatus}) {
+  const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
+  const [comment,dispatch] = useContext(CommentContext)
+  const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -32,15 +36,8 @@ export default function CommentMenu({biketrailId,commentId,setCommentAction,setS
       if(option.target.firstChild.data === 'Delete Comment'){
         alert('Do you really want to delete this item ?')
         console.log(commentId)
-        api.deleteComment(biketrailId,commentId)
-        .then(response => {
-          console.log(JSON.stringify(response))
-          if(response.status === 201){
-            console.log(response.data)
-            setStatus('success')
-            // setMessage(response.data.message)
-          }
-        })
+
+        dispatch({type:'DELETECOMMENT',biketrailId,commentId,setMessage,setLoggedInUser,history})
       }
     } else {
       setCommentAction(null)
