@@ -51,13 +51,18 @@ const createBiketrail = (data,setMessage,setOpen,setLoggedInUser,history) => {
     })
     .catch(err => {
         if(err.response){
-            console.log(err.response.data)
+            console.log(err.response)
             if(err.response.data.name === "TokenExpiredError"){
-                setLoggedInUser(false)
                 localStorage.clear()
                 setMessage('Your session expired, please login again !')
                 history.push('/')
             }
+            if(err.response.status === 401) setMessage(err.response.data.message)
+            history.push('/')
+        } else {
+            console.log(err)
+            setMessage('Ups, something went wrong!')
+            history.push('/')
         }
     })
 }

@@ -15,7 +15,7 @@ import {useBiketrailState} from '../../hooks/useBiketrailState'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
 import {PlotMapLeaflet} from '../Plots'
-import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
+import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 
 
@@ -77,7 +77,7 @@ export default function BikeTrail(props){
     const [biketrail,setBiketrail] = useBiketrailState(id,message) //status,setStatus)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    const [loggedInUser,dispatch] = useContext(SigninContext)
 
     console.log('RENDER biketrail id: ',id)
     // console.log('biketrail.author.id',biketrail.author && biketrail.author.id)

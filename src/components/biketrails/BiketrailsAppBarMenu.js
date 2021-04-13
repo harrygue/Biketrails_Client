@@ -8,6 +8,7 @@ import {NavLink} from 'react-router-dom'
 import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import {useHistory} from 'react-router-dom'
 
+
 const ITEM_HEIGHT = 48;
 
 export default function BiketrailsAppBarMenu(props) {
@@ -50,7 +51,7 @@ export default function BiketrailsAppBarMenu(props) {
   };
 
  return (
-    <div>
+    <React.Fragment>
       <IconButton
         aria-label="more"
         aria-controls="long-menu"
@@ -86,7 +87,7 @@ export default function BiketrailsAppBarMenu(props) {
         </MenuItem>}
 
       </Menu>
-    </div>
+    </React.Fragment>
   );
 
 }

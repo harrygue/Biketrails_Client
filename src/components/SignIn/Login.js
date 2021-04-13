@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
 import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
+import Message from '../Message'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -56,6 +57,7 @@ export default function Login (props){
         e.preventDefault()
         console.log('hit handleSubmit')
         console.log(user)
+        console.log(message)
         dispatch({type:'LOGIN',user,setMessage,history})
         console.log(loggedInUser)
         // apiauth.login(user)
@@ -75,6 +77,7 @@ export default function Login (props){
 
     return(
         <Card>
+            <Message />
             <CardContent>
                 <form
                     encType="multipart/form-data"
