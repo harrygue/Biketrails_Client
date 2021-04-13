@@ -7,7 +7,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
-import {LogginContext,MessageContext} from '../../context/biketrails.context'
+import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
 export default function Login (props){
     const classes = useStyles()
     const history = useHistory()
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    // const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    const [loggedInUser,dispatch] = useContext(SigninContext)
     const [message,setMessage] = useContext(MessageContext)
     const [user,setUser] = useState({
         username:'',
@@ -55,19 +56,21 @@ export default function Login (props){
         e.preventDefault()
         console.log('hit handleSubmit')
         console.log(user)
-        apiauth.login(user)
-        .then(response => {
-            if(response.status === 200){
-                console.log(response.data)
-                localStorage.setItem('profile',JSON.stringify(response.data))
-                setLoggedInUser(localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message)
-                setMessage(`Hello ${response.data.message.username}! Welcome back again !`)
-                history.push('/')
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+        dispatch({type:'LOGIN',user,setMessage,history})
+        console.log(loggedInUser)
+        // apiauth.login(user)
+        // .then(response => {
+        //     if(response.status === 200){
+        //         console.log(response.data)
+        //         localStorage.setItem('profile',JSON.stringify(response.data))
+        //         setLoggedInUser(localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message)
+        //         setMessage(`Hello ${response.data.message.username}! Welcome back again !`)
+        //         history.push('/')
+        //     }
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
     }
 
     return(

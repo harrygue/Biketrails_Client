@@ -31,7 +31,7 @@ const updateComment = (id,commentId,data) => http.put(`/biketrails/${id}/comment
 
 // const register = (registerData) => http.post('/register',registerData)
 // const login = (loginData) => http.post('/login',loginData)
-const logout = () => http.get('/logout')
+// const logout = () => http.get('/logout')
 
 
 export {
@@ -47,5 +47,5 @@ export {
     deleteComment,
     // register,
     // login,
-    logout
+    // logout
 };

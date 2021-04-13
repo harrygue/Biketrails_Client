@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import * as apiauth from '../../api/auth'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
@@ -7,6 +7,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
+import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,6 +31,8 @@ const useStyles = makeStyles(theme => ({
 export default function Register (props){
     const classes = useStyles()
     const history = useHistory()
+    const [loggedInUser,dispatch] = useContext(SigninContext)
+    const [message,setMessage] = useContext(MessageContext)
     const [user,setUser] = useState({
         username:'',
         password:''
@@ -53,17 +56,20 @@ export default function Register (props){
         e.preventDefault()
         console.log('hit Register handleSubmit')
         console.log(user)
-        apiauth.register(user)
-        .then(response => {
-            if(response.status === 200){
-                console.log(response.status, response.data)
-                localStorage.setItem('profile',JSON.stringify(response.data))
-                history.push('/')
-            }
-        })
-        .catch(error => {
-            console.log(error)
-        })
+
+        dispatch({type:'REGISTER',user,setMessage,history})
+
+        // apiauth.register(user)
+        // .then(response => {
+        //     if(response.status === 200){
+        //         console.log(response.status, response.data)
+        //         localStorage.setItem('profile',JSON.stringify(response.data))
+        //         history.push('/')
+        //     }
+        // })
+        // .catch(error => {
+        //     console.log(error)
+        // })
     }
 
     return(
