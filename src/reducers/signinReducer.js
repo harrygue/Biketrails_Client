@@ -4,9 +4,11 @@ import * as apiauth from '../api/auth'
 export const signinReducer = (state,action) => {
     switch(action.type){
         case 'REGISTER':
-            return registerUser(action.user,action.setMessage,action.history)
+            registerUser(action.user,action.setMessage,action.history)
+            return 'registered'
         case 'LOGIN':
-            return loginUser(action.user,action.setMessage,action.history);
+
+            return loginUser(action.user,action.setMessage,action.history)
         case 'LOGOUT':
             logoutUser(action.setMessage,action.history)
             return null
@@ -47,7 +49,7 @@ const loginUser = async (userData,setMessage,history) => {
                 console.log(response.data)
                 localStorage.setItem('profile',JSON.stringify(response.data))
                 setMessage(`Hello ${response.data.message.username}! Welcome back again !`)
-                history.push('/')//return JSON.parse(localStorage.getItem('profile')).message
+                return JSON.parse(localStorage.getItem('profile')).message
             }
         }
     } catch(error){
