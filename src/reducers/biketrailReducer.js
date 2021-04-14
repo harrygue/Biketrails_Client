@@ -1,23 +1,26 @@
 import * as api from '../api'
+import {biketrailActions} from '../other/actionTypes'
+import {successMessages,errorMessages} from '../other/messages'
 
 
 export const biketrailReducer = (state,action) => {
     console.log('biketrailReducer')
     switch(action.type){
-        case 'GETBIKETRAIL':
+        // GET IS NOT USED YET IN DISPATCH
+        case biketrailActions.GETBYID:
             getBiketrail(action.id,action.setBiketrail,action.setMessage)
             return null
-        case 'CREATEBIKETRAIL':
+        case biketrailActions.CREATE:
             console.log('CREATEBIKETRAIL:')
-            createBiketrail(action.formData,action.setMessage,action.setOpen,action.setLoggedInUser,action.history)
+            createBiketrail(action.formData,action.setMessage,action.setOpen,action.history)
             return {message:'Biketrail created'}
-        case 'UPDATEBIKETRAIL':
+        case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`)
-            updateBiketrail(action.biketrailId,action.formData,action.setMessage,action.setStatus,action.setAction,action.setLoggedInUser,action.history)
+            updateBiketrail(action.biketrailId,action.formData,action.setMessage,action.setStatus,action.setAction,action.history)
             return {message:'Biketrail updated'}
-        case 'DELETEBIKETRAIL':
+        case biketrailActions.DELETE:
             console.log(`DELETEBIKETRAIL`)
-            deleteBikeTrail(action.id,action.setMessage,action.setLoggedInUser,action.setAction,action.history)
+            deleteBikeTrail(action.id,action.setMessage,action.setAction,action.history)
             return {message:'Biketrail deleted'}
         default:
             return state
@@ -35,81 +38,73 @@ const getBiketrail = (id,setMessage,setBiketrail) => {
     })
     .catch(error => {
         console.log(error)
-        setMessage('Something went wrong, cannot render the biketrail')
+        setMessage(errorMessages.renderFailure(error.response.data.error.message))
     })
 }
 
-const createBiketrail = (data,setMessage,setOpen,setLoggedInUser,history) => {
+const createBiketrail = (data,setMessage,setOpen,history) => {
     console.log('createBiketrail in biketrailReducer.js')
     api.createBikeTrail(data)
     .then(response => {
         if(response.status === 200){
             console.log(response.data.message)
-            setMessage(response.data.message)  
+            setMessage(successMessages.createBiketrailOk(response.data.biketrail.name))  
             setOpen(false)
         }
     })
     .catch(err => {
-        if(err.response){
-            console.log(err.response)
-            if(err.response.data.name === "TokenExpiredError"){
-                localStorage.clear()
-                setMessage('Your session expired, please login again !')
-                history.push('/')
-            }
-            if(err.response.status === 401) setMessage(err.response.data.message)
-            history.push('/')
+        console.log(err.response)
+        if(err.response.status === 401){
+            setMessage(errorMessages.notAuthorized)
         } else {
-            console.log(err)
-            setMessage('Ups, something went wrong!')
-            history.push('/')
+            console.log('create biketrail error: else')
+            setMessage(errorMessages.createFailure(err.response.data.error.message))
         }
+        history.push('/')
     })
 }
 
-const updateBiketrail = (id,data,setMessage,setStatus,setAction,setLoggedInUser,history) => {
+const updateBiketrail = (id,data,setMessage,setStatus,setAction,history) => {
     api.updateBikeTrail(id,data)
     .then(response => {
        if(response.status === 200){
-           console.log(response.data)
+           console.log(response)
            setStatus('success')
-           setMessage(response.data.message)  
+           setMessage(successMessages.updateBiketrailOk(response.data.biketrail.name))  
            setAction(null)
        }
     })
     .catch(err => {
-       if(err.response){
-           console.log(err.response.data)
-           if(err.response.data.name === "TokenExpiredError"){
-               setLoggedInUser(false)
-               localStorage.clear()
-               setMessage('Your session expired, please login again !')
-               history.push('/')
-           }
-       }
+        console.log(err.response)
+        if(err.response.status === 401){
+            setMessage(errorMessages.notAuthorized)
+        } else {
+            console.log('update biketrail error: else')
+            setMessage(errorMessages.updateFailure(err.response.data.error.message))
+        }
+        history.push('/')
     })
 }
 
-const deleteBikeTrail = (id,setMessage,setLoggedInUser,setAction,history) => {
+const deleteBikeTrail = (id,setMessage,setAction,history) => {
     api.deleteBikeTrail(id)
     .then(response => {
       console.log(JSON.stringify(response))
       if(response.status === 200){
         console.log(response.data.message)
-        setMessage(response.data.message)
+        setMessage(successMessages.deleteBiketrailOk(id))
         setAction(response.data.message)
         history.push('/')
       }
     })
     .catch(err => {
-        if(err.response){
-            console.log(err.response.data)
-            if(err.response.data.name === "TokenExpiredError"){
-                setLoggedInUser(false)
-                localStorage.clear()
-                setMessage('Your session expired, please login again !')
-                history.push('/')
-            }
+        console.log(err.response)
+        if(err.response.status === 401){
+            setMessage(errorMessages.notAuthorized)
+        } else {
+            console.log('update biketrail error: else')
+            setMessage(errorMessages.generalError)
         }
+        history.push('/')
     })
 }

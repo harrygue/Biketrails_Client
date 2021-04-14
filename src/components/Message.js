@@ -2,6 +2,7 @@ import React,{useContext} from 'react'
 import {Grid,Typography} from '@material-ui/core'
 import {MessageContext} from '../context/biketrails.context'
 import { v4 as uuidv4 } from 'uuid';
+import {settings} from '../other/setting'
 
 export default function Message(){
     const [message,setMessage] = useContext(MessageContext);
@@ -11,7 +12,7 @@ export default function Message(){
           {message && <Typography variant='h3' style={{color:'green'}}>{message}</Typography>}
           {message && setTimeout(() => {
               setMessage(null)
-          },3000)}
+          },settings.messageTimeout)}
         </Grid>
     )
 }

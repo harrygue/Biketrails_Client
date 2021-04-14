@@ -74,7 +74,7 @@ export default function BikeTrail(props){
     const [message,setMessage] = useContext(MessageContext)
 
     // const [biketrail,dispatch] = useContext(BiketrailContext)
-    const [biketrail,setBiketrail] = useBiketrailState(id,message) //status,setStatus)
+    const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage) //status,setStatus)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatch] = useContext(SigninContext)

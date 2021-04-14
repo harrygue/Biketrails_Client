@@ -1,9 +1,12 @@
 import {useState,useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import * as api from '../api'
+import {errorMessages,successMessages} from '../other/messages'
 
 // status, setStatus
-export const useBiketrailState = (id,message) => {
+export const useBiketrailState = (id,message,setMessage) => {
     const [biketrail,setBiketrail] = useState([])
+    const history = useHistory()
     useEffect(() => {
         console.log('RUN USE BIKETRAIL EFFECT')
         const fetchBiketrail = async(id) => {
@@ -16,6 +19,8 @@ export const useBiketrailState = (id,message) => {
                 }
             } catch (error){
                 console.log(error)
+                setMessage(errorMessages.renderFailure(id))
+                history.push('/')
             }
         }
         fetchBiketrail(id)
