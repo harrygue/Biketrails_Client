@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import * as apiauth from '../../api/auth'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
@@ -9,6 +9,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
 import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
 import Message from '../Message'
+import {useToggleState} from '../../hooks/useToggleState'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -39,7 +40,12 @@ export default function Login (props){
         username:'',
         password:''
     })
-    const [show,setShow] = useState(true)
+
+    const [open,setOpen] = useState(true)
+
+    console.log('Login open ? ',open)
+
+    const [show,setShow] = useState(false)
 
     const toggleShow = () => {
         setShow(!show)
@@ -58,7 +64,7 @@ export default function Login (props){
         console.log('hit handleSubmit')
         console.log(user)
         console.log(message)
-        dispatch({type:'LOGIN',user,setMessage,history})
+        dispatch({type:'LOGIN',user,setMessage,setOpen})
         console.log(loggedInUser)
         // apiauth.login(user)
         // .then(response => {
@@ -75,10 +81,10 @@ export default function Login (props){
         // })
     }
 
-    return(
+    return (
         <Card>
             <Message />
-            <CardContent>
+            {open ? <CardContent>
                 <form
                     encType="multipart/form-data"
                     autoComplete='off'
@@ -126,7 +132,7 @@ export default function Login (props){
                     Login
                 </Button>
                 </form>
-            </CardContent>
+            </CardContent> : history.push('/')}
         </Card>
     )
 }

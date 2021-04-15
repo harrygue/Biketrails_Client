@@ -165,9 +165,9 @@ export default function EditBiketrailForm(props){
                         variant='outlined'
                         size='small'
                         color='secondary'
-                        onClick={() => {setBiketrailData(emptyBT) }}
+                        onClick={() => { setAction(null) }}
                     >
-                        Clear
+                        Back
                     </Button>
                     </div>
                     <Typography variant='h6'>{gpxFileName && gpxFileName.split('\/').slice(-1)}</Typography>

@@ -1,9 +1,9 @@
-import React,{useContext} from 'react';
+import React,{useContext, useEffect} from 'react';
 import BiketrailCard from './BiketrailCard'
 import { makeStyles } from '@material-ui/core/styles';
 import {Grid,Typography} from '@material-ui/core';
 import {useAllBiketrailState} from '../../hooks/useAllBiketrailState'
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext, SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 
 
@@ -26,8 +26,13 @@ export default function Biketrails(props){
     const classes = useStyles();
     const [biketrails,setBiketrails] = useAllBiketrailState(message,setMessage);
     // const biketrails = useContext(BiketrailsContext)
+    const [loggedInUser,dispatchLogin] = useContext(SigninContext)
     console.log(biketrails)
     console.log('MESSAGE: ',message)
+
+    useEffect(() => {
+        dispatchLogin({type:null})
+    },[dispatchLogin])
 
     return (
         <Grid container className={classes.mainContainer}

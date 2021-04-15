@@ -30,6 +30,6 @@ export const useBiketrailState = (id,message,setMessage) => {
         //     setStatus(null)
         //     console.log('useBiketrailState CALLBACK, Status: ',status)
         // }
-    },[id,message])
+    },[id,message,setMessage,history])
     return [biketrail,setBiketrail]
 }

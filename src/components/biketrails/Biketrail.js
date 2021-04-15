@@ -15,8 +15,9 @@ import {useBiketrailState} from '../../hooks/useBiketrailState'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
 import {PlotMapLeaflet} from '../Plots'
-import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context'
+import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
+import {biketrailActions} from '../../other/actionTypes'
 
 
 const useStyles = makeStyles(theme =>({
@@ -73,15 +74,15 @@ export default function BikeTrail(props){
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
 
-    // const [biketrail,dispatch] = useContext(BiketrailContext)
-    const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage) //status,setStatus)
+    // const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
+    const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
-    const [loggedInUser,dispatch] = useContext(SigninContext)
+    const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
 
     console.log('RENDER biketrail id: ',id)
-    // console.log('biketrail.author.id',biketrail.author && biketrail.author.id)
-    // console.log('logged user id: ',loggedInUser && loggedInUser._id)
+    console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
+    console.log('logged user id: ',loggedInUser && loggedInUser._id)
     // console.log(biketrail.images)
     // console.log(biketrail.comments)
     setMessage('')
@@ -93,8 +94,8 @@ export default function BikeTrail(props){
     };
 
     return (
-        
-        <Grid container className={classes.mainContainer}>
+        <>
+        {biketrail && <Grid container className={classes.mainContainer}>
             { selectAction !== 'Edit' ?
             <>
             <Message />
@@ -167,7 +168,8 @@ export default function BikeTrail(props){
                         setStatus={setStatus}
                     />
         }
-        </Grid>
+        </Grid>}
+        </>
     )
 }
 

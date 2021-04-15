@@ -8,8 +8,7 @@ export const biketrailReducer = (state,action) => {
     switch(action.type){
         // GET IS NOT USED YET IN DISPATCH
         case biketrailActions.GETBYID:
-            getBiketrail(action.id,action.setBiketrail,action.setMessage)
-            return null
+            return {...state,...getBiketrail(action.id,action.setMessage)}
         case biketrailActions.CREATE:
             console.log('CREATEBIKETRAIL:')
             createBiketrail(action.formData,action.setMessage,action.setOpen,action.history)
@@ -27,19 +26,19 @@ export const biketrailReducer = (state,action) => {
     }
 }
 
-const getBiketrail = (id,setMessage,setBiketrail) => {
+// DID NOT WORK AS EXPECTED: STATE NOT UPDATED, BIKETRAIL EMPTY
+const getBiketrail = async (id,setMessage) => {
     console.log('getBiketrail in biketrailReducer.js')
-    api.getBikeTrail(id)
-    .then(response => {
+    try{
+        const response = await api.getBikeTrail(id)
         if(response.status === 200){
             console.log(response.data.biketrail)
-            setBiketrail(response.data.biketrail)
+            return response.data.biketrail
         }
-    })
-    .catch(error => {
+    } catch(error){
         console.log(error)
         setMessage(errorMessages.renderFailure(error.response.data.error.message))
-    })
+    }
 }
 
 const createBiketrail = (data,setMessage,setOpen,history) => {

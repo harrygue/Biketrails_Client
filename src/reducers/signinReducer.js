@@ -6,26 +6,26 @@ import {signinActions} from '../other/actionTypes'
 export const signinReducer = (state,action) => {
     switch(action.type){
         case signinActions.REGISTER:
-            registerUser(action.user,action.setMessage,action.history)
-            return 'registered'
+            return {...state,...registerUser(action.user,action.setMessage,action.setOpen)}
         case signinActions.LOGIN:
-            return loginUser(action.user,action.setMessage,action.history)
+            return {...state,...loginUser(action.user,action.setMessage,action.setOpen)}
         case signinActions.LOGOUT:
             logoutUser(action.setMessage,action.history)
             return null
         default:
-            return action.history.push('/')
+            return localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message
     }
 }
 
-const registerUser = async (userData,setMessage,history) => {
+const registerUser = async (userData,setMessage,setOpen) => {
     try{
         const response = await apiauth.register(userData)
         if(response.status === 200){
             console.log(response.status, response.data)
             localStorage.setItem('profile',JSON.stringify(response.data))
             setMessage(successMessages.registerOk(response.data.message.username))
-            history.push('/') // return JSON.parse(localStorage.getItem('profile')).message
+            setOpen(false)
+            return JSON.parse(localStorage.getItem('profile')).message
         } 
     } catch(error){
         if(error.response){
@@ -35,11 +35,12 @@ const registerUser = async (userData,setMessage,history) => {
             console.log('error handling')
             setMessage(errorMessages.generalError)
         }
+        setOpen(false)
         return null
     }
 }
 
-const loginUser = async (userData,setMessage,history) => {
+const loginUser = async (userData,setMessage,setOpen) => {
     try{
         const response = await apiauth.login(userData)
         if(response.status === 200){
@@ -50,6 +51,7 @@ const loginUser = async (userData,setMessage,history) => {
                 console.log(response.data)
                 localStorage.setItem('profile',JSON.stringify(response.data))
                 setMessage(successMessages.loginOk(response.data.message.username))
+                setOpen(false)
                 return JSON.parse(localStorage.getItem('profile')).message
             }
         }
@@ -66,7 +68,8 @@ const loginUser = async (userData,setMessage,history) => {
         } else {
             setMessage(errorMessages.generalError)
         }
-        history.push('/')
+        setOpen(false)
+        return null
     }
 }
 

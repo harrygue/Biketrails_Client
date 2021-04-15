@@ -38,8 +38,12 @@ export default function Register (props){
         username:'',
         password:''
     })
+
+    // to show the component and switch to Biketrails after successful Register
+    const [open,setOpen] = useState(true)
+    console.log('Register open ? ',open)
+    // to toggle the Menu
     const [show,setShow] = useState(true)
-    
 
     const toggleShow = () => {
         setShow(!show)
@@ -58,7 +62,7 @@ export default function Register (props){
         console.log('hit Register handleSubmit')
         console.log(user)
         console.log(loggedInUser)
-        dispatch({type:'REGISTER',user,setMessage,history})
+        dispatch({type:'REGISTER',user,setMessage,setOpen})
 
         // apiauth.register(user)
         // .then(response => {
@@ -76,7 +80,7 @@ export default function Register (props){
     return(
         <Card>
             <Message />
-            <CardContent>
+            {open ? <CardContent>
                 <form
                     encType="multipart/form-data"
                     autoComplete='off'
@@ -124,7 +128,7 @@ export default function Register (props){
                     Register
                 </Button>
                 </form>
-            </CardContent>
+            </CardContent> : history.push('/')}
         </Card>
     )
 }

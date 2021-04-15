@@ -10,35 +10,9 @@ import BiketrailForm from './components/biketrails/BiketrailForm';
 import BiketrailsAppBar from './components/biketrails/BiketrailsAppbar'
 import Login from './components/SignIn/Login'
 import Register from './components/SignIn/Register'
-// import {LogginContext} from './context/biketrails.context'
 
-
-
-// const useStyles = makeStyles(theme => ({
-//   appBar: {
-//     borderRadius: 15,
-//     margin: '30px 0',
-//     display: 'flex',
-//     flexDirection: 'row',
-//     justifyContent: 'space-evenly',
-//     alignItems: 'center',
-//   },
-//   heading: {
-//       color: 'rgba(0,183,255, 1)',
-//       textDecoration:'none'
-//   },
-//   image: {
-//       marginLeft: '15px',
-//   },
-//   [theme.breakpoints.down('sm')]:{
-//       mainContainer: {
-//           flexDirection: 'column-reverse'
-//       }
-//   }
-// }))
 
 function App() {
-
   return (
     <Container maxWidth='lg'>
       <BiketrailsAppBar />
