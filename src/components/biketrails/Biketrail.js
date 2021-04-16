@@ -18,6 +18,9 @@ import {PlotMapLeaflet} from '../Plots'
 import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 import {biketrailActions} from '../../other/actionTypes'
+// import {getBiketrail} from '../../reducers/biketrailReducer'
+import * as api from '../../api'
+import {errorMessages,successMessages} from '../../other/messages'
 
 
 const useStyles = makeStyles(theme =>({
@@ -74,8 +77,8 @@ export default function BikeTrail(props){
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
 
-    // const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
-    const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage)
+    const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
+    // const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
@@ -92,6 +95,31 @@ export default function BikeTrail(props){
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+
+    const getBiketrail = async (id,setMessage) => {
+        console.log('getBiketrail in biketrailReducer.js')
+        try{
+            const response = await api.getBikeTrail(id)
+            if(response.status === 200){
+                console.log(response.data.biketrail)
+                dispatchBiketrail({type:biketrailActions.GETBYID,biketrail:response.data.biketrail})
+            }
+        } catch(error){
+            console.log(error)
+            setMessage(errorMessages.renderFailure(error.response.data.error.message))
+        }
+    }
+
+    useEffect(() => {
+        getBiketrail(id,setMessage)
+        // clean up function: 
+        // this forces useEffect to run every time a new image is added
+        return () => {
+            setStatus(null)
+            console.log('BIKETRAIL USE EFFECT CALLBACK, Status: ',status)
+        }
+    },[id,setMessage])
+
 
     return (
         <>
@@ -151,12 +179,12 @@ export default function BikeTrail(props){
                             setStatus={setStatus}
                         />
                         ) : <Typography variant='h2' styles={{color:'blue'}}>Looks pretty empty here !</Typography>}
-                    </Collapse>
+                    </Collapse>* 
                 </Card>
                 {selectAction === 'Add Image' && <ImageForm id={id} setAction={setAction} setStatus={setStatus}/>}
             </Grid> 
             </>  :  <EditBiketrailForm 
-                        biketrailId={id} 
+                        id={id} 
                         name={biketrail.name} 
                         description={biketrail.description} 
                         location={biketrail.location}
@@ -164,14 +192,9 @@ export default function BikeTrail(props){
                         gpxFileName={biketrail.gpxFileName}
                         existingGpxFile={biketrail.gpxFile}
                         setAction={setAction}
-                        status={status}
-                        setStatus={setStatus}
                     />
         }
         </Grid>}
         </>
     )
 }
-
-// export const MemoizedBiketrail = React.memo(BikeTrail)
-

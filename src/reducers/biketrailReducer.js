@@ -3,20 +3,20 @@ import {biketrailActions} from '../other/actionTypes'
 import {successMessages,errorMessages} from '../other/messages'
 
 
+
 export const biketrailReducer = (state,action) => {
     console.log('biketrailReducer')
     switch(action.type){
         // GET IS NOT USED YET IN DISPATCH
         case biketrailActions.GETBYID:
-            return {...state,...getBiketrail(action.id,action.setMessage)}
+            return {...state,...action.biketrail}
         case biketrailActions.CREATE:
             console.log('CREATEBIKETRAIL:')
-            createBiketrail(action.formData,action.setMessage,action.setOpen,action.history)
-            return {message:'Biketrail created'}
+            // createBiketrail(action.formData,action.setMessage,action.setOpen,action.history)
+            return {...state,...action.biketrail}
         case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`)
-            updateBiketrail(action.biketrailId,action.formData,action.setMessage,action.setStatus,action.setAction,action.history)
-            return {message:'Biketrail updated'}
+            return {...state,...action.biketrail}
         case biketrailActions.DELETE:
             console.log(`DELETEBIKETRAIL`)
             deleteBikeTrail(action.id,action.setMessage,action.setAction,action.history)
@@ -26,21 +26,7 @@ export const biketrailReducer = (state,action) => {
     }
 }
 
-// DID NOT WORK AS EXPECTED: STATE NOT UPDATED, BIKETRAIL EMPTY
-const getBiketrail = async (id,setMessage) => {
-    console.log('getBiketrail in biketrailReducer.js')
-    try{
-        const response = await api.getBikeTrail(id)
-        if(response.status === 200){
-            console.log(response.data.biketrail)
-            return response.data.biketrail
-        }
-    } catch(error){
-        console.log(error)
-        setMessage(errorMessages.renderFailure(error.response.data.error.message))
-    }
-}
-
+/*
 const createBiketrail = (data,setMessage,setOpen,history) => {
     console.log('createBiketrail in biketrailReducer.js')
     api.createBikeTrail(data)
@@ -49,6 +35,7 @@ const createBiketrail = (data,setMessage,setOpen,history) => {
             console.log(response.data.message)
             setMessage(successMessages.createBiketrailOk(response.data.biketrail.name))  
             setOpen(false)
+            return response.data.biketrail
         }
     })
     .catch(err => {
@@ -63,6 +50,7 @@ const createBiketrail = (data,setMessage,setOpen,history) => {
     })
 }
 
+
 const updateBiketrail = (id,data,setMessage,setStatus,setAction,history) => {
     api.updateBikeTrail(id,data)
     .then(response => {
@@ -71,6 +59,7 @@ const updateBiketrail = (id,data,setMessage,setStatus,setAction,history) => {
            setStatus('success')
            setMessage(successMessages.updateBiketrailOk(response.data.biketrail.name))  
            setAction(null)
+           return response.data.biketrail
        }
     })
     .catch(err => {
@@ -84,6 +73,8 @@ const updateBiketrail = (id,data,setMessage,setStatus,setAction,history) => {
         history.push('/')
     })
 }
+*/
+
 
 const deleteBikeTrail = (id,setMessage,setAction,history) => {
     api.deleteBikeTrail(id)
