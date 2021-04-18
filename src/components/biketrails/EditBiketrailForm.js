@@ -81,8 +81,8 @@ export default function EditBiketrailForm(props){
            if(response.status === 200){
                console.log(response)
                setMessage(successMessages.updateBiketrailOk(response.data.biketrail.name))  
-               setOpen(false)
-               setAction(null)
+               // setOpen(false)
+               // setAction(null)
                dispatch({type:biketrailActions.UPDATE,biketrail:response.data.biketrail})
            }
         })
@@ -112,7 +112,7 @@ export default function EditBiketrailForm(props){
 
     return (
         <>
-            {open ? <Paper className={classes.paper}>
+            <Paper className={classes.paper}>
                 <form
                     encType="multipart/form-data"
                     autoComplete='off'
@@ -200,7 +200,7 @@ export default function EditBiketrailForm(props){
                     </div>
                     <Typography variant='h6'>{gpxFileName && gpxFileName.split('\/').slice(-1)}</Typography>
                 </form>
-            </Paper> : <Redirect to={`/biketrails/${id}`} />}
+            </Paper>
         </>
     )
 }

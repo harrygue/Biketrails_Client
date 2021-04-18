@@ -1,18 +1,17 @@
 import * as api from '../api'
-import {biketrailActions} from '../other/actionTypes'
+import {biketrailActions, imageActions} from '../other/actionTypes'
 import {successMessages,errorMessages} from '../other/messages'
 
 
 
 export const biketrailReducer = (state,action) => {
-    console.log('biketrailReducer')
+    console.log('biketrailReducer',state)
     switch(action.type){
         // GET IS NOT USED YET IN DISPATCH
         case biketrailActions.GETBYID:
             return {...state,...action.biketrail}
         case biketrailActions.CREATE:
             console.log('CREATEBIKETRAIL:')
-            // createBiketrail(action.formData,action.setMessage,action.setOpen,action.history)
             return {...state,...action.biketrail}
         case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`)
@@ -21,6 +20,10 @@ export const biketrailReducer = (state,action) => {
             console.log(`DELETEBIKETRAIL`)
             deleteBikeTrail(action.id,action.setMessage,action.setAction,action.history)
             return {message:'Biketrail deleted'}
+        case imageActions.CREATE:
+            return {...state,...action.biketrail}
+        case imageActions.DELETE:
+            return {...state,...action.id}
         default:
             return state
     }

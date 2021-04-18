@@ -3,7 +3,8 @@ import {Card, CardContent, Typography,TextField, Button} from '@material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
 import * as api from '../../api'
 import {useHistory} from 'react-router-dom'
-import {LogginContext,MessageContext} from '../../context/biketrails.context.js'
+import {BiketrailContext, LogginContext,MessageContext} from '../../context/biketrails.context.js'
+import {biketrailActions, imageActions} from '../../other/actionTypes'
 
 
 const useStyles = makeStyles(theme => ({
@@ -38,6 +39,7 @@ export default function ImageForm({id,setAction,setStatus}){
     const [image,setImage] = useState(null)
     const [location,setLocation] = useState("")
     const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    const [biketrail,dispatch] = useContext(BiketrailContext)
     const [message,setMessage] = useContext(MessageContext)
 
 
@@ -52,9 +54,10 @@ export default function ImageForm({id,setAction,setStatus}){
         .then(response => {
             if(response.status === 201){
                 console.log(response.status)
-                setMessage(response.data.message)
+                setMessage('Image added!')
                 setAction(null)
                 setStatus("success")
+                dispatch({type:imageActions,biketrail:response.data.biketrail})
             }
         })
         .catch(err => {

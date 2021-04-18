@@ -115,10 +115,11 @@ export default function BikeTrail(props){
         // clean up function: 
         // this forces useEffect to run every time a new image is added
         return () => {
-            setStatus(null)
-            console.log('BIKETRAIL USE EFFECT CALLBACK, Status: ',status)
+            setAction(null)
+            console.log('Message: ',message)
+            console.log('BIKETRAIL USE EFFECT CALLBACK, Action: ',selectAction)
         }
-    },[id,setMessage])
+    },[id,setMessage,message,setAction])
 
 
     return (

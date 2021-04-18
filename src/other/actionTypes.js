@@ -11,3 +11,8 @@ export const biketrailActions = {
     UPDATE: 'UPDATEBIKETRAIL',
     DELETE: 'DELETEBIKETRAIL'
 }
+
+export const imageActions = {
+    CREATE:'CREATEIMAGE',
+    DELETE:'DELETEIMAGE'
+}
