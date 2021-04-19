@@ -200,7 +200,7 @@ export default function BiketrailForm(props){
                     </div>
                 </form>
             </Paper> : 
-            <Redirect to={`/biketrails/${biketrailId}`} />}
+            <Redirect to={`/biketrails`} />}
 
         </>
     )

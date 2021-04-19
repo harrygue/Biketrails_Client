@@ -25,13 +25,13 @@ export function BiketrailsProvider(props){
     // const [biketrail,setBiketrail] = useBiketrailState(id,status,setStatus)
     // const [loggedInUser,setLoggedInUser] = useLoggedInUser()
     const [message,setMessage] = useState()
-    const [biketrail,dispatch] = useBiketrailReducer(biketrailReducer)
+    const [biketrails,dispatch] = useBiketrailReducer(biketrailReducer)
     const [comment,dispatchComment] = useCommentReducer(commentReducer)
     const [loggedInUser,dispatchLoggedInUser] = useSigninReducer(signinReducer)
 
     
     return(
-        <BiketrailContext.Provider value={[biketrail,dispatch]}>
+        <BiketrailContext.Provider value={[biketrails,dispatch]}>
             <CommentContext.Provider value={[comment,dispatchComment]}>
                 <SigninContext.Provider value={[loggedInUser,dispatchLoggedInUser]}>
                     <MessageContext.Provider value={[message,setMessage]}>

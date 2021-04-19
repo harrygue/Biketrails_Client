@@ -39,7 +39,7 @@ export default function ImageForm({id,setAction,setStatus}){
     const [image,setImage] = useState(null)
     const [location,setLocation] = useState("")
     const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext)
+    const [biketrails,dispatch] = useContext(BiketrailContext)
     const [message,setMessage] = useContext(MessageContext)
 
 

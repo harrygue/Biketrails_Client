@@ -7,22 +7,21 @@ import {successMessages,errorMessages} from '../other/messages'
 export const biketrailReducer = (state,action) => {
     console.log('biketrailReducer',state)
     switch(action.type){
-        // GET IS NOT USED YET IN DISPATCH
-        case biketrailActions.GETBYID:
-            return {...state,...action.biketrail}
+        case biketrailActions.GETALLBIKETRAILS:
+            return action.biketrails
         case biketrailActions.CREATE:
             console.log('CREATEBIKETRAIL:')
-            return {...state,...action.biketrail}
+            return [...state,action.biketrail]
         case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`)
-            return {...state,...action.biketrail}
+            return [...state,state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)]
         case biketrailActions.DELETE:
-            console.log(`DELETEBIKETRAIL`)
-            deleteBikeTrail(action.id,action.setMessage,action.setAction,action.history)
-            return {message:'Biketrail deleted'}
+            console.log(`DELETEBIKETRAIL`,action.id)
+            return [...state,state.filter(biketrail => biketrail._id !== action.id)]
         case imageActions.CREATE:
-            return {...state,...action.biketrail}
-        case imageActions.DELETE:
+            return [...state,state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)]
+        // not active yet
+            case imageActions.DELETE:
             return {...state,...action.id}
         default:
             return state
@@ -76,8 +75,6 @@ const updateBiketrail = (id,data,setMessage,setStatus,setAction,history) => {
         history.push('/')
     })
 }
-*/
-
 
 const deleteBikeTrail = (id,setMessage,setAction,history) => {
     api.deleteBikeTrail(id)
@@ -101,3 +98,4 @@ const deleteBikeTrail = (id,setMessage,setAction,history) => {
         history.push('/')
     })
 }
+*/

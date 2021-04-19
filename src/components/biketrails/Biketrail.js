@@ -77,8 +77,8 @@ export default function BikeTrail(props){
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
 
-    const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
-    // const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage)
+    const [biketrails,dispatchBiketrail] = useContext(BiketrailContext)
+    const [biketrail,setBiketrail] = useState(biketrails.find(bt => bt._id === id))
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
@@ -95,32 +95,6 @@ export default function BikeTrail(props){
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
-
-    const getBiketrail = async (id,setMessage) => {
-        console.log('getBiketrail in biketrailReducer.js')
-        try{
-            const response = await api.getBikeTrail(id)
-            if(response.status === 200){
-                console.log(response.data.biketrail)
-                dispatchBiketrail({type:biketrailActions.GETBYID,biketrail:response.data.biketrail})
-            }
-        } catch(error){
-            console.log(error)
-            setMessage(errorMessages.renderFailure(error.response.data.error.message))
-        }
-    }
-
-    useEffect(() => {
-        getBiketrail(id,setMessage)
-        // clean up function: 
-        // this forces useEffect to run every time a new image is added
-        return () => {
-            setAction(null)
-            console.log('Message: ',message)
-            console.log('BIKETRAIL USE EFFECT CALLBACK, Action: ',selectAction)
-        }
-    },[id,setMessage,message,setAction])
-
 
     return (
         <>
