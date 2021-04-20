@@ -43,6 +43,7 @@ export default function Biketrails(props){
                 const response = await api.getBikeTrails()
                 if(response.status === 200){
                     // setBiketrails(response.data.biketrails)
+                    
                     dispatch({type:biketrailActions.GETALLBIKETRAILS,biketrails:response.data.biketrails})
                 }
             }

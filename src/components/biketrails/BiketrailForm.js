@@ -52,7 +52,7 @@ const emptyBT = {
 export default function BiketrailForm(props){
     const [message,setMessage] = useContext(MessageContext)
     const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
+    const [biketrails,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
     const classes = useStyles()
     const history = useHistory()
     const [biketrailData,setBiketrailData] = useState(emptyBT)

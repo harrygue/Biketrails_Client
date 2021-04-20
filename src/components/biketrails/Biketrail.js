@@ -21,6 +21,7 @@ import {biketrailActions} from '../../other/actionTypes'
 // import {getBiketrail} from '../../reducers/biketrailReducer'
 import * as api from '../../api'
 import {errorMessages,successMessages} from '../../other/messages'
+import {useHistory} from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme =>({
@@ -76,12 +77,28 @@ export default function BikeTrail(props){
     const [status,setStatus] = useState(null)
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
+    const history = useHistory()
 
     const [biketrails,dispatchBiketrail] = useContext(BiketrailContext)
-    const [biketrail,setBiketrail] = useState(biketrails.find(bt => bt._id === id))
+    const [biketrail,setBiketrail] = useState(null)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
+
+    useEffect(() => {
+        if(!biketrails){
+            setBiketrail(JSON.parse(localStorage.getItem('biketrail')))
+        } else {
+            console.log('Message from Biketrail Useeffect',message)
+            const bt = biketrails.find(bt => bt._id === id)
+            localStorage.setItem('biketrail',JSON.stringify(bt))
+            setBiketrail(bt)
+        }
+        // cleanup function to return to biketrail after edit
+        return () => { setAction(null) }
+    },[biketrails,message])
+        
+    console.log('BIKETRAILS: ',biketrails)
 
     console.log('RENDER biketrail id: ',id)
     console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
