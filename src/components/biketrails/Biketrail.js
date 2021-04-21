@@ -22,6 +22,7 @@ import {biketrailActions} from '../../other/actionTypes'
 import * as api from '../../api'
 import {errorMessages,successMessages} from '../../other/messages'
 import {useHistory} from 'react-router-dom'
+import {fetchBiketrails} from '../../actions/biketrail.actions'
 
 
 const useStyles = makeStyles(theme =>({
@@ -87,16 +88,16 @@ export default function BikeTrail(props){
 
     useEffect(() => {
         if(!biketrails){
-            setBiketrail(JSON.parse(localStorage.getItem('biketrail')))
+            const bt = JSON.parse(localStorage.getItem('biketrail'))
+            setBiketrail(bt)
         } else {
-            console.log('Message from Biketrail Useeffect',message)
             const bt = biketrails.find(bt => bt._id === id)
             localStorage.setItem('biketrail',JSON.stringify(bt))
             setBiketrail(bt)
         }
         // cleanup function to return to biketrail after edit
         return () => { setAction(null) }
-    },[biketrails,message])
+    },[message])
         
     console.log('BIKETRAILS: ',biketrails)
 

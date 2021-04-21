@@ -7,6 +7,8 @@ import {MessageContext, SigninContext,BiketrailContext} from '../../context/bike
 import Message from '../Message'
 import * as api from '../../api'
 import {biketrailActions} from '../../other/actionTypes'
+import {fetchBiketrails} from '../../actions/biketrail.actions'
+import {useHistory} from 'react-router-dom'
 
 
 
@@ -26,6 +28,7 @@ const useStyles = makeStyles(theme =>({
 
 export default function Biketrails(props){
     const [message,setMessage] = useContext(MessageContext);
+    const history = useHistory()
     const classes = useStyles();
     // const [biketrails,setBiketrails] = useAllBiketrailState(message,setMessage);
     const [biketrails,dispatch ]= useContext(BiketrailContext)
@@ -37,22 +40,26 @@ export default function Biketrails(props){
         dispatchLogin({type:null})
     },[dispatchLogin])
 
+    //useEffect(() => {
+    //    try{
+    //        const fetchBiketrails = async() => {
+    //            const response = await api.getBikeTrails()
+    //            if(response.status === 200){
+    //                // setBiketrails(response.data.biketrails)
+    //                
+    //                dispatch({type:biketrailActions.GETALLBIKETRAILS,biketrails:response.data.biketrails})
+    //            }
+    //        }
+    //        fetchBiketrails()
+    //        console.log("RUN USEEFFECT IN Biketrails")
+    //        console.log(message,biketrails)
+    //    } catch(error){
+    //        console.log(error)
+    //    }
+    //},[message])
+
     useEffect(() => {
-        try{
-            const fetchBiketrails = async() => {
-                const response = await api.getBikeTrails()
-                if(response.status === 200){
-                    // setBiketrails(response.data.biketrails)
-                    
-                    dispatch({type:biketrailActions.GETALLBIKETRAILS,biketrails:response.data.biketrails})
-                }
-            }
-            fetchBiketrails()
-            console.log("RUN USEEFFECT IN Biketrails")
-            console.log(message,biketrails)
-        } catch(error){
-            console.log(error)
-        }
+        fetchBiketrails(dispatch,message,history)
     },[message])
 
     return (
