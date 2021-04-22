@@ -14,6 +14,7 @@ export const biketrailReducer = (state,action) => {
             return [...state,action.biketrail]
         case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`,action.biketrail)
+            console.log(state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail))
             localStorage.setItem('biketrail',JSON.stringify(action.biketrail))
             return state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)
         case biketrailActions.DELETE:
