@@ -87,10 +87,15 @@ export default function BikeTrail(props){
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
 
     useEffect(() => {
+        console.log(message)
+        console.log(selectAction)
         if(!biketrails){
             const bt = JSON.parse(localStorage.getItem('biketrail'))
+            console.log(bt)
             setBiketrail(bt)
+
         } else {
+            console.log('BIKETRAILS: ',biketrails)
             const bt = biketrails.find(bt => bt._id === id)
             localStorage.setItem('biketrail',JSON.stringify(bt))
             setBiketrail(bt)
@@ -99,15 +104,13 @@ export default function BikeTrail(props){
         return () => { setAction(null) }
     },[message])
         
-    console.log('BIKETRAILS: ',biketrails)
-
-    console.log('RENDER biketrail id: ',id)
-    console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
-    console.log('logged user id: ',loggedInUser && loggedInUser._id)
+    // console.log('RENDER biketrail id: ',id)
+    // console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
+    // console.log('logged user id: ',loggedInUser && loggedInUser._id)
     // console.log(biketrail.images)
     // console.log(biketrail.comments)
     setMessage('')
-    console.log('MESSAGE: ',message)
+    // console.log('MESSAGE: ',message)
     // console.log('GPX Filename: ',biketrail.gpxFileName)
 
     const handleExpandClick = () => {

@@ -88,11 +88,11 @@ export default function EditBiketrailForm(props){
         })
         .catch(err => {
             console.log(err.response)
-            if(err.response.status === 401){
+            if(err.response && err.response.status === 401){
                 setMessage(errorMessages.notAuthorized)
             } else {
-                console.log('update biketrail error: else')
-                setMessage(errorMessages.updateFailure(err.response.data.error.message))
+                console.log(err)
+                setMessage(errorMessages.updateFailure('Ops, something was wrong!'))
             }
             history.push('/')
         })

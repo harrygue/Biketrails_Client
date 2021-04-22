@@ -15,12 +15,12 @@ export const biketrailReducer = (state,action) => {
         case biketrailActions.UPDATE:
             console.log(`UPDATEBIKETRAIL`,action.biketrail)
             localStorage.setItem('biketrail',JSON.stringify(action.biketrail))
-            return [...state,state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)]
+            return state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)
         case biketrailActions.DELETE:
             console.log(`DELETEBIKETRAIL`,action.id)
-            return [...state,state.filter(biketrail => biketrail._id !== action.id)]
+            return state.filter(biketrail => biketrail._id !== action.id)
         case imageActions.CREATE:
-            return [...state,state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)]
+            return state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)
         // not active yet
             case imageActions.DELETE:
             return {...state,...action.id}
