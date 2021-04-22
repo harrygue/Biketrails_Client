@@ -2,7 +2,6 @@ import React,{useContext, useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
 import * as api from '../../api'
-import Biketrails from './Biketrails';
 import {useHistory,Redirect} from 'react-router-dom'
 import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
 import {successMessages,errorMessages} from '../../other/messages'
@@ -51,8 +50,6 @@ const emptyBT = {
 
 export default function BiketrailForm(props){
     const [message,setMessage] = useContext(MessageContext)
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
     const classes = useStyles()
     const history = useHistory()
     const [biketrailData,setBiketrailData] = useState(emptyBT)
@@ -63,26 +60,25 @@ export default function BiketrailForm(props){
 
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
-            console.log(e.target.name)
+            // console.log(e.target.name)
             setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
         } else {
-            console.log(e.target.name)
-            console.log(e.target.files[0])
+            // console.log(e.target.name)
+            // console.log(e.target.files[0])
             setGpxFile(e.target.files[0])
         }
 
     }
 
     const createBiketrail = (data,setMessage,setOpen,history) => {
-        console.log('createBiketrail in biketrailReducer.js')
+        // console.log('createBiketrail in biketrailReducer.js')
         api.createBikeTrail(data)
         .then(response => {
             if(response.status === 200){
-                console.log(response.data.message)
+                // console.log(response.data.biketrail._id)
                 setMessage(successMessages.createBiketrailOk(response.data.biketrail.name))  
-                setOpen(false)
                 setBiketrailId(response.data.biketrail._id)
-                dispatch({type:'CREATEBIKETRAIL',biketrail:response.data.biketrail})
+                setOpen(false)
             }
         })
         .catch(err => {
@@ -99,7 +95,7 @@ export default function BiketrailForm(props){
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+        // console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
         var formData = new FormData()
         for(let name in biketrailData){
             formData.append(name,biketrailData[name])
@@ -107,7 +103,6 @@ export default function BiketrailForm(props){
         formData.append('gpxFile',gpxFile)
 
         createBiketrail(formData,setMessage,setOpen,history)
-        //dispatch({type:'CREATEBIKETRAIL',formData,setMessage,setOpen,setLoggedInUser,history})
     }
     
     // add entype for file upload

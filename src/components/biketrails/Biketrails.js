@@ -27,8 +27,8 @@ export default function Biketrails(props){
     const [biketrails,setBiketrails] = useAllBiketrailState(message,setMessage);
     // const biketrails = useContext(BiketrailsContext)
     const [loggedInUser,dispatchLogin] = useContext(SigninContext)
-    console.log(biketrails)
-    console.log('MESSAGE: ',message)
+    // console.log(biketrails)
+    // console.log('MESSAGE: ',message)
 
     useEffect(() => {
         dispatchLogin({type:null})

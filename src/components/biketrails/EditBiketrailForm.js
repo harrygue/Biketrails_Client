@@ -1,12 +1,10 @@
 import React,{useState,useContext} from 'react'
-import {useHistory,Redirect} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
 import * as api from '../../api'
-import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
+import {MessageContext} from '../../context/biketrails.context'
 import {successMessages,errorMessages} from '../../other/messages'
-import {biketrailActions} from '../../other/actionTypes'
-
 
 // temporary hardcoded, later make db cluster
 const categories = [{value:'All',label:'All'},
@@ -41,49 +39,30 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const emptyBT = {
-    name: '',
-    description:'',
-    location:'',
-    category:'',
-    gpxFile:''
-}
 export default function EditBiketrailForm(props){
     const classes = useStyles()
     const history = useHistory()
     const {id,name,description,location,category,gpxFileName,setAction} = props;
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
     const [message,setMessage] = useContext(MessageContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
     const bt = {name,description,location,category}
-    const [biketrailId,setBiketrailId] = useState(null)
-    const [open,setOpen] = useState(true)
     const [biketrailData,setBiketrailData] = useState(bt)
     const [gpxFile,setGpxFile] = useState({})
 
-    console.log('EditBiketrailForm: id: ',id)
-
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
-            console.log(e.target.name)
             setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
         } else {
-            console.log(e.target.name)
-            console.log(e.target.files[0])
             setGpxFile(e.target.files[0])
         }
 
     }
 
-    const updateBiketrail = (id,data,setMessage,setAction,history) => { 
+    const updateBiketrail = (id,data,setMessage,history) => { 
         api.updateBikeTrail(id,data)
         .then(response => {
            if(response.status === 200){
-               console.log(response)
+               // console.log(response)
                setMessage(successMessages.updateBiketrailOk(response.data.biketrail.name))  
-               // setOpen(false)
-               // setAction(null)
-               dispatch({type:biketrailActions.UPDATE,biketrail:response.data.biketrail})
            }
         })
         .catch(err => {
@@ -91,7 +70,6 @@ export default function EditBiketrailForm(props){
             if(err.response.status === 401){
                 setMessage(errorMessages.notAuthorized)
             } else {
-                console.log('update biketrail error: else')
                 setMessage(errorMessages.updateFailure(err.response.data.error.message))
             }
             history.push('/')
@@ -100,14 +78,14 @@ export default function EditBiketrailForm(props){
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+        // console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
             var formData = new FormData()
             for(let name in biketrailData){
                 biketrailData[name] && formData.append(name,biketrailData[name])
             }
             gpxFile && formData.append('gpxFile',gpxFile)
             
-            updateBiketrail(id,formData,setMessage,setAction,history)
+            updateBiketrail(id,formData,setMessage,history)
     }
 
     return (

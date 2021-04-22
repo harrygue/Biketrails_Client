@@ -35,7 +35,7 @@
     position: absolute;
     top: 50%;
     right: 25px;
-    z-index: 999;
+    z-index: 500;
     color: rgb(90, 74, 74);
   }
   
@@ -47,6 +47,16 @@
     color: rgb(26, 23, 23);
   }
   
+  .wasteBasket {
+    cursor: pointer;
+    position: absolute;
+    bottom: 10%;
+    right: 10px;
+    z-index:999;
+    color: rgb(rgb(26, 23, 23));
+    font-size: 25px;
+  }
+
   .fa-arrow-right:before, .fa-arrow-left:before {
     color: #222
   }

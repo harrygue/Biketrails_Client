@@ -3,8 +3,7 @@ import {Card, CardContent, Typography,TextField, Button} from '@material-ui/core
 import { makeStyles } from '@material-ui/core/styles';
 import * as api from '../../api'
 import {useHistory} from 'react-router-dom'
-import {BiketrailContext, LogginContext,MessageContext} from '../../context/biketrails.context.js'
-import {biketrailActions, imageActions} from '../../other/actionTypes'
+import {LogginContext,MessageContext} from '../../context/biketrails.context.js'
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,13 +32,12 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-export default function ImageForm({id,setAction,setStatus}){
+export default function ImageForm({id}){
     const classes = useStyles()
     const history = useHistory()
     const [image,setImage] = useState(null)
     const [location,setLocation] = useState("")
     const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext)
     const [message,setMessage] = useContext(MessageContext)
 
 
@@ -53,17 +51,13 @@ export default function ImageForm({id,setAction,setStatus}){
         api.createImage(id,formData)
         .then(response => {
             if(response.status === 201){
-                console.log(response.status)
                 setMessage('Image added!')
-                setAction(null)
-                setStatus("success")
-                dispatch({type:imageActions,biketrail:response.data.biketrail})
             }
         })
         .catch(err => {
             if(err.response){
                 console.log(err.response.data)
-                if(err.response.data.name === "TokenExpiredError"){
+                if(err.response.data.error.name === "TokenExpiredError"){
                     setLoggedInUser(false)
                     localStorage.clear()
                     setMessage('Your session expired, please login again !')

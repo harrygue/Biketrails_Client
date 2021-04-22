@@ -1,8 +1,8 @@
 import React,{Component} from 'react'
 import '../../styles/ImageSliderStyles.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'; // left
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'; // right
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 
 class ImageSlider extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ class ImageSlider extends Component {
               {
                 // this.state.
                 this.props.images.map((image, i) => (
-                  <Slide key={i} image={image.image} />
+                  <Slide key={i} image={image} />
                 ))
               }
           </div>
@@ -77,14 +77,20 @@ class ImageSlider extends Component {
   }
   
   
-  const Slide = ({ image }) => {
+  const Slide = (props) => {
+    const {image} = props.image
     const styles = {
       backgroundImage: `url(${image})`,
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: '50% 60%'
     }
-    return <div className="slide" style={styles}></div>
+    return (
+      <div className="slide" style={styles}>
+        <WasteBasket image={props.image}/>
+      </div>
+
+    )
   }
   
   const LeftArrow = (props) => {
@@ -104,12 +110,12 @@ class ImageSlider extends Component {
     );
   }
   
+  const WasteBasket = ({image}) => {
+    return (
+      <div className="wasteBasket">
+        <DeleteOutlinedIcon onClick={() => console.log('waste basket',image)}/>
+      </div>
+    )
+  }
+
   export const MemoizedImageSlider = React.memo(ImageSlider);
-
-  // ReactDOM.render(
-  //   <Slider />,
-  //   document.querySelector('.app')
-  // )
-
-  // fa fa-arrow-right fa-2x
-  // fa fa-arrow-left fa-2x

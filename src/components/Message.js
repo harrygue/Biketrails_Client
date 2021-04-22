@@ -6,7 +6,7 @@ import {settings} from '../other/setting'
 
 export default function Message(){
     const [message,setMessage] = useContext(MessageContext);
-    console.log('Render Message: ',message)
+    // console.log('Render Message: ',message)
     return (
         <Grid item xs={12} sm={12} key={uuidv4()}>
           {message && <Typography variant='h3' style={{color:'green'}}>{message}</Typography>}

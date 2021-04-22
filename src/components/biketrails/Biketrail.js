@@ -11,14 +11,12 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditBiketrailForm from './EditBiketrailForm'
 import BiketrailMenu from './BiketrailMenu'
-import {useBiketrailState} from '../../hooks/useBiketrailState'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
 import {PlotMapLeaflet} from '../Plots'
 import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 import {biketrailActions} from '../../other/actionTypes'
-// import {getBiketrail} from '../../reducers/biketrailReducer'
 import * as api from '../../api'
 import {errorMessages,successMessages} from '../../other/messages'
 
@@ -72,24 +70,22 @@ const useStyles = makeStyles(theme =>({
 
 export default function BikeTrail(props){
     const {id} = props.match.params;
-    // const {message,setMessage} = props;
     const [status,setStatus] = useState(null)
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
 
     const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
-    // const [biketrail,setBiketrail] = useBiketrailState(id,message,setMessage)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
 
-    console.log('RENDER biketrail id: ',id)
-    console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
-    console.log('logged user id: ',loggedInUser && loggedInUser._id)
+    // console.log('RENDER biketrail id: ',id)
+    // console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
+    // console.log('logged user id: ',loggedInUser && loggedInUser._id)
     // console.log(biketrail.images)
     // console.log(biketrail.comments)
     setMessage('')
-    console.log('MESSAGE: ',message)
+    // console.log('MESSAGE: ',message)
     // console.log('GPX Filename: ',biketrail.gpxFileName)
 
     const handleExpandClick = () => {
@@ -97,11 +93,11 @@ export default function BikeTrail(props){
     };
 
     const getBiketrail = async (id,setMessage) => {
-        console.log('getBiketrail in biketrailReducer.js')
+        // console.log('getBiketrail in biketrailReducer.js')
         try{
             const response = await api.getBikeTrail(id)
             if(response.status === 200){
-                console.log(response.data.biketrail)
+                // console.log(response.data.biketrail)
                 dispatchBiketrail({type:biketrailActions.GETBYID,biketrail:response.data.biketrail})
             }
         } catch(error){
@@ -116,10 +112,10 @@ export default function BikeTrail(props){
         // this forces useEffect to run every time a new image is added
         return () => {
             setAction(null)
-            console.log('Message: ',message)
-            console.log('BIKETRAIL USE EFFECT CALLBACK, Action: ',selectAction)
+            // console.log('Message: ',message)
+            // console.log('BIKETRAIL USE EFFECT CALLBACK, Action: ',selectAction)
         }
-    },[id,setMessage,message,setAction])
+    },[message])
 
 
     return (
@@ -182,7 +178,7 @@ export default function BikeTrail(props){
                         ) : <Typography variant='h2' styles={{color:'blue'}}>Looks pretty empty here !</Typography>}
                     </Collapse>* 
                 </Card>
-                {selectAction === 'Add Image' && <ImageForm id={id} setAction={setAction} setStatus={setStatus}/>}
+                {selectAction === 'Add Image' && <ImageForm id={id}/>}
             </Grid> 
             </>  :  <EditBiketrailForm 
                         id={id} 
