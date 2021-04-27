@@ -82,7 +82,7 @@ const logoutUser = (setMessage,history) => {
             localStorage.clear() //removeItem('profile')
             // setMessage('You logged out, see you next time !!!')
             setMessage(successMessages.logoutOk)
-            history.push('/')
+            history && history.push('/')
         }
     })
 }

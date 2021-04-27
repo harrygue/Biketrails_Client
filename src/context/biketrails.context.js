@@ -43,17 +43,3 @@ export function BiketrailsProvider(props){
     )
 
 }
-
-/*
-return(
-    <BiketrailContext.Provider value={[biketrail,dispatch]}>
-        <CommentContext.Provider value={[comment,dispatchComment]}>
-            <LogginContext.Provider value={[loggedInUser,setLoggedInUser]}>
-                <MessageContext.Provider value={[message,setMessage]}>
-                    {props.children}
-                </MessageContext.Provider>
-            </LogginContext.Provider>
-        </CommentContext.Provider>
-    </BiketrailContext.Provider>
-)
-*/

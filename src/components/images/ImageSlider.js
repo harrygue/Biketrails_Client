@@ -1,8 +1,11 @@
-import React,{Component} from 'react'
+import React,{Component,useContext} from 'react'
 import '../../styles/ImageSliderStyles.css'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'; // left
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'; // right
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import * as api from '../../api'
+import {useHistory} from 'react-router-dom'
+import {MessageContext} from '../../context/biketrails.context'
 
 class ImageSlider extends Component {
     constructor(props) {
@@ -59,7 +62,9 @@ class ImageSlider extends Component {
               {
                 // this.state.
                 this.props.images.map((image, i) => (
-                  <Slide key={i} image={image} />
+                  <>
+                    <Slide key={i} image={image}/>
+                  </>
                 ))
               }
           </div>
@@ -71,6 +76,7 @@ class ImageSlider extends Component {
           <RightArrow
            goToNextSlide={this.goToNextSlide}
           />
+          <WasteBasket key={this.props.images[this.state.currentIndex].image_id} image={this.props.images[this.state.currentIndex]} biketrail_id={this.props.biketrail_id}/>
         </div>
       );
     }
@@ -86,10 +92,7 @@ class ImageSlider extends Component {
       backgroundPosition: '50% 60%'
     }
     return (
-      <div className="slide" style={styles}>
-        <WasteBasket image={props.image}/>
-      </div>
-
+      <div className="slide" style={styles}></div>
     )
   }
   
@@ -110,10 +113,29 @@ class ImageSlider extends Component {
     );
   }
   
-  const WasteBasket = ({image}) => {
+  const WasteBasket = ({image,biketrail_id}) => {
+    const history = useHistory()
+    const [message,setMessage] = useContext(MessageContext)
     return (
       <div className="wasteBasket">
-        <DeleteOutlinedIcon onClick={() => console.log('waste basket',image)}/>
+        <DeleteOutlinedIcon onClick={
+            () => {
+              console.log('waste basket',biketrail_id,image._id)
+              api.deleteImage(biketrail_id,image._id)
+              .then(response => {
+                console.log(response)
+                setMessage('Image deleted!')
+                history.push('/message')
+                // history.push(`/biketrails/${biketrail_id}`)
+              })
+              .catch(error => {
+                console.log(error)
+                setMessage('Some error occured during an attempt to delete an image!')
+                history.push('/message')
+                history.push('/')
+              })
+            }
+          }/>
       </div>
     )
   }

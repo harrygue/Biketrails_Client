@@ -33,8 +33,8 @@ const deleteBikeTrail = (id,setMessage,setAction,history) => {
       }
     })
     .catch(err => {
-        console.log(err.response)
         if(err.response.status === 401){
+            console.log(err.response)
             setMessage(errorMessages.notAuthorized)
         } else {
             console.log('update biketrail error: else')

@@ -13,8 +13,8 @@ export const useAllBiketrailState = (message,setMessage) => {
                 }
             }
             fetchBiketrails()
-            // console.log("RUN USEEFFECT IN useAllBiketrailState")
-            // console.log(message,biketrails)
+            console.log("RUN USEEFFECT IN useAllBiketrailState")
+            console.log(message,biketrails)
         } catch(error){
             console.log(error)
         }

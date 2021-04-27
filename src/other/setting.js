@@ -1,3 +1,3 @@
 export const settings = {
-    messageTimeout: 5000
+    messageTimeout: 3000
 }

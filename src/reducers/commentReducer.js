@@ -15,7 +15,7 @@ export const commentReducer = (state,action) => {
             updateComment(action.biketrailId,action.commentId,action.commentData,action.setCommentAction,action.setMessage,action.setLoggedInUser,action.history)
             return null
         case 'DELETECOMMENT':
-            deleteComment(action.biketrailId,action.commentId,action.setMessage,action.setLoggedInUser,action.history)
+            // deleteComment(action.biketrailId,action.commentId,action.setMessage,action.setLoggedInUser,action.history)
             return null
     }
 }
@@ -38,19 +38,10 @@ const createComment = ( bt_id, data,setAction,setMessage,setLoggedInUser,history
             setMessage(response.data.message)
         }
     })
-    .catch(err => {
-        if(err.response){
-            console.log(err.response.data)
-            if(err.response.data.name === "TokenExpiredError"){
-                setLoggedInUser(false)
-                localStorage.clear()
-                setMessage('Your session expired, please login again !')
-                history.push('/')
-            } else {
-                setMessage('Ups, something went wrong !')
-                history.push('/')
-            }
-        }
+    .catch(error => {
+        console.log(error)
+        setMessage('Ups, something went wrong, eventually your session expired !')
+        history.push(`/biketrails/${bt_id}`)
     })
 }
 

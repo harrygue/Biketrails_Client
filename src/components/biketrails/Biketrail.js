@@ -84,8 +84,8 @@ export default function BikeTrail(props){
     // console.log('logged user id: ',loggedInUser && loggedInUser._id)
     // console.log(biketrail.images)
     // console.log(biketrail.comments)
-    setMessage('')
-    // console.log('MESSAGE: ',message)
+    // setMessage('')
+    console.log('MESSAGE: ',message)
     // console.log('GPX Filename: ',biketrail.gpxFileName)
 
     const handleExpandClick = () => {
@@ -132,7 +132,7 @@ export default function BikeTrail(props){
             </Grid>
             <Grid item xs={12} sm={8}>
                 <Card className={classes.root}>
-                    {biketrail.images && biketrail.images.length >0 && <MemoizedImageSlider images={biketrail.images}/>}
+                    {biketrail.images && biketrail.images.length >0 && <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/>}
                     <CardContent>
                         <Typography variant='h4'>{biketrail.name}</Typography>
                         <Typography variant='body2'>{biketrail.description}</Typography>

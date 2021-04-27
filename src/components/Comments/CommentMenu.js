@@ -5,7 +5,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import * as api from '../../api'
-import {MessageContext,LogginContext,CommentContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext,CommentContext} from '../../context/biketrails.context'
+import {signinActions} from '../../other/actionTypes'
 
 const options = [
   'Edit Comment',
@@ -18,7 +19,7 @@ export default function CommentMenu({biketrailId,commentId,setCommentAction,setS
   const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
   const [comment,dispatch] = useContext(CommentContext)
-  const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+  const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -37,7 +38,9 @@ export default function CommentMenu({biketrailId,commentId,setCommentAction,setS
         alert('Do you really want to delete this item ?')
         console.log(commentId)
 
-        dispatch({type:'DELETECOMMENT',biketrailId,commentId,setMessage,setLoggedInUser,history})
+        // dispatch({type:'DELETECOMMENT',biketrailId,commentId,setMessage,history})
+        deleteComment(biketrailId,commentId,setMessage,history)
+
       }
     } else {
       setCommentAction(null)
@@ -45,6 +48,31 @@ export default function CommentMenu({biketrailId,commentId,setCommentAction,setS
 
     setAnchorEl(null);
   };
+
+  // ------------------ DELETE COMMENT -----------------------
+  const deleteComment = (bt_id,commentId,setMessage,setLoggedInUser,history) => {
+    api.deleteComment(bt_id,commentId)
+    .then(response => {
+      console.log(response.data)
+      setMessage(response.data.message)
+      // history.push(`/biketrails/${bt_id}`)
+      dispatch({type:'DELETECOMMENT'})
+    })
+    .catch(err => {
+        if(err.response){
+            console.log(err.response.data)
+            if(err.response.data.error.name === "TokenExpiredError"){
+                localStorage.clear()
+                setMessage('Your session expired, please login again !')
+                // history.push(`/biketrails/${bt_id}`)
+                dispatchLoggedInUser({type:signinActions.LOGOUT, setMessage,history})
+            } else {
+                setMessage('Ups, something went wrong !')
+                // history.push(`/biketrails/${bt_id}`)
+            }
+        }
+    })
+  }
 
  return (
     <div>
