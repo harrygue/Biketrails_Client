@@ -22,7 +22,7 @@ import {biketrailActions} from '../../other/actionTypes'
 import * as api from '../../api'
 import {errorMessages,successMessages} from '../../other/messages'
 import {useHistory} from 'react-router-dom'
-import {fetchBiketrails} from '../../actions/biketrail.actions'
+import {fetchBiketrailById} from '../../actions/biketrail.actions'
 
 
 const useStyles = makeStyles(theme =>({
@@ -80,8 +80,7 @@ export default function BikeTrail(props){
     const [message,setMessage] = useContext(MessageContext)
     const history = useHistory()
 
-    const [biketrails,dispatchBiketrail] = useContext(BiketrailContext)
-    const [biketrail,setBiketrail] = useState(null)
+    const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
@@ -89,17 +88,7 @@ export default function BikeTrail(props){
     useEffect(() => {
         console.log(message)
         console.log(selectAction)
-        if(!biketrails){
-            const bt = JSON.parse(localStorage.getItem('biketrail'))
-            console.log(bt)
-            setBiketrail(bt)
-
-        } else {
-            console.log('BIKETRAILS: ',biketrails)
-            const bt = biketrails.find(bt => bt._id === id)
-            localStorage.setItem('biketrail',JSON.stringify(bt))
-            setBiketrail(bt)
-        }
+        fetchBiketrailById(id,dispatchBiketrail,setMessage,history)
         // cleanup function to return to biketrail after edit
         return () => { setAction(null) }
     },[message])
@@ -109,7 +98,7 @@ export default function BikeTrail(props){
     // console.log('logged user id: ',loggedInUser && loggedInUser._id)
     // console.log(biketrail.images)
     // console.log(biketrail.comments)
-    setMessage('')
+    // setMessage('')
     // console.log('MESSAGE: ',message)
     // console.log('GPX Filename: ',biketrail.gpxFileName)
 
@@ -131,7 +120,7 @@ export default function BikeTrail(props){
             </Grid>
             <Grid item xs={12} sm={8}>
                 <Card className={classes.root}>
-                    {biketrail.images && biketrail.images.length >0 && <MemoizedImageSlider images={biketrail.images}/>}
+                    {biketrail.images && biketrail.images.length >0 && <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/>}
                     <CardContent>
                         <Typography variant='h4'>{biketrail.name}</Typography>
                         <Typography variant='body2'>{biketrail.description}</Typography>

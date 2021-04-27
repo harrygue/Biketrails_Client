@@ -24,6 +24,7 @@ const deleteBikeTrail = id => http.delete(`/biketrails/${id}`)
 
 const getImages = (id) => http.get(`/biketrails/${id}/images`)
 const createImage = (id,data) => http.post(`/biketrails/${id}/images`,data)
+const deleteImage = (id,imageId) => http.delete(`/biketrails/${id}/images/${imageId}`)
 
 const createComment = (id,data) => http.post(`/biketrails/${id}/comments`,data)
 const deleteComment = (id,commentId) => http.delete(`/biketrails/${id}/comments/${commentId}`)
@@ -42,6 +43,7 @@ export {
     deleteBikeTrail,
     getImages,
     createImage,
+    deleteImage,
     createComment,
     updateComment,
     deleteComment,

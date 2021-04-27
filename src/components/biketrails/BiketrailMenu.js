@@ -4,9 +4,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import * as api from '../../api'
-import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
-import {successMessages,errorMessages} from '../../other/messages'
+import {MessageContext} from '../../context/biketrails.context'
+import {deleteBiketrail} from '../../actions/biketrail.actions'
 
 
 const options = [
@@ -18,40 +17,15 @@ const options = [
 
 const ITEM_HEIGHT = 48;
 
-export default function BiketrailMenu({id,selectAction,setAction}) {
+export default function BiketrailMenu({id,setAction}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory()
-  const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
   const [message,setMessage] = useContext(MessageContext)
-  const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const deleteBikeTrail = (id,setMessage,setAction,history) => {
-    api.deleteBikeTrail(id)
-    .then(response => {
-      console.log(JSON.stringify(response))
-      if(response.status === 200){
-        console.log(response.data.message)
-        setMessage(successMessages.deleteBiketrailOk(id))
-        setAction(response.data.message)
-        dispatch({type:'DELETEBIKETRAIL',id})
-      }
-    })
-    .catch(err => {
-        console.log(err.response)
-        if(err.response.status === 401){
-            setMessage(errorMessages.notAuthorized)
-        } else {
-            console.log('update biketrail error: else')
-            setMessage(errorMessages.generalError)
-        }
-        history.push('/')
-    })
-}
 
   const handleClose = (option) => {
 
@@ -61,7 +35,7 @@ export default function BiketrailMenu({id,selectAction,setAction}) {
 
       if(option.target.firstChild.data === 'Delete'){
         alert('Do you really want to delete this item ?')
-        deleteBikeTrail(id,setMessage,setAction,history)
+        deleteBiketrail(id,setMessage,history)
       }
     } else {
       setAction(null)

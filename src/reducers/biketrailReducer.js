@@ -7,24 +7,9 @@ import {successMessages,errorMessages} from '../other/messages'
 export const biketrailReducer = (state,action) => {
     console.log('biketrailReducer',state)
     switch(action.type){
-        case biketrailActions.GETALLBIKETRAILS:
-            return action.biketrails
-        case biketrailActions.CREATE:
-            console.log('CREATEBIKETRAIL:')
-            return [...state,action.biketrail]
-        case biketrailActions.UPDATE:
-            console.log(`UPDATEBIKETRAIL`,action.biketrail)
-            console.log(state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail))
-            localStorage.setItem('biketrail',JSON.stringify(action.biketrail))
-            return state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)
-        case biketrailActions.DELETE:
-            console.log(`DELETEBIKETRAIL`,action.id)
-            return state.filter(biketrail => biketrail._id !== action.id)
-        case imageActions.CREATE:
-            return state.map(biketrail => biketrail._id === action.biketrail._id ? action.biketrail : biketrail)
-        // not active yet
-            case imageActions.DELETE:
-            return {...state,...action.id}
+        case biketrailActions.GETBYID:
+            console.log(action.biketrail)
+            return action.biketrail
         default:
             return state
     }

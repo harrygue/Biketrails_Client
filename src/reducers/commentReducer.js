@@ -38,18 +38,12 @@ const createComment = ( bt_id, data,setAction,setMessage,setLoggedInUser,history
             setMessage(response.data.message)
         }
     })
-    .catch(err => {
-        if(err.response){
-            console.log(err.response.data)
-            if(err.response.data.name === "TokenExpiredError"){
-                setLoggedInUser(false)
-                localStorage.clear()
-                setMessage('Your session expired, please login again !')
-                history.push('/')
-            } else {
-                setMessage('Ups, something went wrong !')
-                history.push('/')
-            }
+    .catch(error => {
+        if(error.status === 401){
+            setMessage('Not authorized !')
+            localStorage.clear()
+        } else {
+            setMessage('Ups, something went wrong, eventually you have to login again !')
         }
     })
 }

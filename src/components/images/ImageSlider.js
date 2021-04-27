@@ -1,8 +1,12 @@
-import React,{Component} from 'react'
+import React,{Component,useContext} from 'react'
 import '../../styles/ImageSliderStyles.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'; // left
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'; // right
+import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
+import * as api from '../../api'
+import {useHistory} from 'react-router-dom'
+import {MessageContext} from '../../context/biketrails.context'
+import {deleteImage} from '../../actions/image.actions'
 
 class ImageSlider extends Component {
     constructor(props) {
@@ -59,7 +63,9 @@ class ImageSlider extends Component {
               {
                 // this.state.
                 this.props.images.map((image, i) => (
-                  <Slide key={i} image={image.image} />
+                  <>
+                    <Slide key={i} image={image}/>
+                  </>
                 ))
               }
           </div>
@@ -71,20 +77,24 @@ class ImageSlider extends Component {
           <RightArrow
            goToNextSlide={this.goToNextSlide}
           />
+          <WasteBasket image={this.props.images[this.state.currentIndex]} biketrail_id={this.props.biketrail_id}/>
         </div>
       );
     }
   }
   
   
-  const Slide = ({ image }) => {
+  const Slide = (props) => {
+    const {image} = props.image
     const styles = {
       backgroundImage: `url(${image})`,
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: '50% 60%'
     }
-    return <div className="slide" style={styles}></div>
+    return (
+      <div className="slide" style={styles}></div>
+    )
   }
   
   const LeftArrow = (props) => {
@@ -104,12 +114,19 @@ class ImageSlider extends Component {
     );
   }
   
+  const WasteBasket = ({image,biketrail_id}) => {
+    const history = useHistory()
+    const [message,setMessage] = useContext(MessageContext)
+    return (
+      <div className="wasteBasket">
+        <DeleteOutlinedIcon onClick={
+            () => {
+              console.log('waste basket',biketrail_id,image._id)
+              deleteImage(biketrail_id,image._id,setMessage,history)
+            }
+          }/>
+      </div>
+    )
+  }
+
   export const MemoizedImageSlider = React.memo(ImageSlider);
-
-  // ReactDOM.render(
-  //   <Slider />,
-  //   document.querySelector('.app')
-  // )
-
-  // fa fa-arrow-right fa-2x
-  // fa fa-arrow-left fa-2x

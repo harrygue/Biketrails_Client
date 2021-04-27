@@ -5,12 +5,14 @@ import {useLoggedInUser} from '../hooks/useLoggedInUser'
 import * as api from '../api'
 import {biketrailReducer} from '../reducers/biketrailReducer'
 import {useBiketrailReducer} from '../hooks/useBiketrailReducer'
+import {allBiketrailReducer} from '../reducers/allBiketrailReducer'
+import {useAllBiketrailReducer} from '../hooks/useAllBiketrailReducer'
 import {commentReducer} from '../reducers/commentReducer'
 import {useCommentReducer} from '../hooks/useCommentReducer'
 import {signinReducer} from '../reducers/signinReducer'
 import {useSigninReducer} from '../hooks/useSigninReducer'
 
-export const BiketrailsContext = createContext([[],() => {}]);
+export const AllBiketrailsContext = createContext([[],() => {}]);
 export const BiketrailContext = createContext([[],() => {}]);
 export const CommentContext = createContext([[],() => {}]);
 export const LogginContext = createContext([[],() => {}])
@@ -25,21 +27,24 @@ export function BiketrailsProvider(props){
     // const [biketrail,setBiketrail] = useBiketrailState(id,status,setStatus)
     // const [loggedInUser,setLoggedInUser] = useLoggedInUser()
     const [message,setMessage] = useState()
-    const [biketrails,dispatch] = useBiketrailReducer(biketrailReducer)
+    const [allBiketrails,dispatchAllBiketrails] = useAllBiketrailReducer(allBiketrailReducer)
+    const [biketrail,dispatchBiketrail] = useBiketrailReducer(biketrailReducer)
     const [comment,dispatchComment] = useCommentReducer(commentReducer)
     const [loggedInUser,dispatchLoggedInUser] = useSigninReducer(signinReducer)
 
     
     return(
-        <BiketrailContext.Provider value={[biketrails,dispatch]}>
-            <CommentContext.Provider value={[comment,dispatchComment]}>
-                <SigninContext.Provider value={[loggedInUser,dispatchLoggedInUser]}>
-                    <MessageContext.Provider value={[message,setMessage]}>
-                        {props.children}
-                    </MessageContext.Provider>
-                </SigninContext.Provider>
-            </CommentContext.Provider>
-        </BiketrailContext.Provider>
+        <AllBiketrailsContext.Provider value={[allBiketrails,dispatchAllBiketrails]}>
+            <BiketrailContext.Provider value={[biketrail,dispatchBiketrail]}>
+                <CommentContext.Provider value={[comment,dispatchComment]}>
+                    <SigninContext.Provider value={[loggedInUser,dispatchLoggedInUser]}>
+                        <MessageContext.Provider value={[message,setMessage]}>
+                            {props.children}
+                        </MessageContext.Provider>
+                    </SigninContext.Provider>
+                </CommentContext.Provider>
+            </BiketrailContext.Provider>
+        </AllBiketrailsContext.Provider>
     )
 
 }

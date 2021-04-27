@@ -6,6 +6,7 @@ import * as api from '../../api'
 import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
 import {successMessages,errorMessages} from '../../other/messages'
 import {biketrailActions} from '../../other/actionTypes'
+import {updateBiketrail} from '../../actions/biketrail.actions'
 
 
 // temporary hardcoded, later make db cluster
@@ -75,29 +76,6 @@ export default function EditBiketrailForm(props){
 
     }
 
-    const updateBiketrail = (id,data,setMessage,setAction,history) => { 
-        api.updateBikeTrail(id,data)
-        .then(response => {
-           if(response.status === 200){
-               console.log(response)
-               setMessage(successMessages.updateBiketrailOk(response.data.biketrail.name))  
-               // setOpen(false)
-               // setAction(null)
-               dispatch({type:biketrailActions.UPDATE,biketrail:response.data.biketrail})
-           }
-        })
-        .catch(err => {
-            console.log(err.response)
-            if(err.response && err.response.status === 401){
-                setMessage(errorMessages.notAuthorized)
-            } else {
-                console.log(err)
-                setMessage(errorMessages.updateFailure('Ops, something was wrong!'))
-            }
-            history.push('/')
-        })
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
@@ -107,7 +85,7 @@ export default function EditBiketrailForm(props){
             }
             gpxFile && formData.append('gpxFile',gpxFile)
             
-            updateBiketrail(id,formData,setMessage,setAction,history)
+            updateBiketrail(id,formData,setMessage,history)
     }
 
     return (

@@ -1,6 +1,6 @@
 import React,{useReducer} from 'react'
 
-export const useBiketrailReducer =(reducer) => {
+export const useAllBiketrailReducer =(reducer) => {
     const [state,dispatch] = useReducer(reducer)
     return [state,dispatch]
 }
