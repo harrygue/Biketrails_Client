@@ -1,4 +1,3 @@
-import {biketrailActions} from '../other/actionTypes'
 import * as api from '../api'
 import {successMessages,errorMessages} from '../other/messages'
 
@@ -7,8 +6,7 @@ export const createImage = (biketrailId,formData,setMessage,history) => {
         .then(response => {
             if(response.status === 201){
                 console.log(response.data.biketrail)
-                setMessage('Image added!')
-                // setAction(null)
+                setMessage(successMessages.addImageOk)
             }
         })
         .catch(err => {

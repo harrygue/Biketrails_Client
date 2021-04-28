@@ -7,7 +7,6 @@ export const fetchBiketrails = async(dispatch,setMessage,history) => {
     try{
         const response = await api.getBikeTrails()
         if(response.status === 200){
-            console.log(response.data.biketrails)
             dispatch({type:biketrailActions.GETALLBIKETRAILS,biketrails:response.data.biketrails})
         }
     } catch(error){
@@ -20,17 +19,14 @@ export const fetchBiketrails = async(dispatch,setMessage,history) => {
 export const fetchBiketrailById = async (id,dispatch,setMessage,history) => {
     try {
         const response = await api.getBikeTrail(id)
-        console.log(response)
         dispatch({type:biketrailActions.GETBYID,biketrail:response.data.biketrail})
     } catch(error){
-        console.log(error)
         setMessage("Ops, something went wrong !")
         history.push('/')
     }
 }
 
 export const createBiketrail = (data,setMessage,setOpen,history) => {
-    console.log('createBiketrail in biketrailReducer.js')
     api.createBikeTrail(data)
     .then(response => {
         if(response.status === 200){
@@ -40,7 +36,7 @@ export const createBiketrail = (data,setMessage,setOpen,history) => {
         }
     })
     .catch(err => {
-        console.log(err.response)
+        console.log(err)
         if(err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
         } else {
@@ -60,7 +56,7 @@ export const updateBiketrail = (id,data,setMessage,history) => {
        }
     })
     .catch(err => {
-        console.log(err.response)
+        console.log(err)
         if(err.response && err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
         } else {
@@ -81,7 +77,7 @@ export const deleteBiketrail = (id,setMessage,history) => {
       }
     })
     .catch(err => {
-        console.log(err.response)
+        console.log(err)
         if(err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
         } else {

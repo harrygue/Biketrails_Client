@@ -1,5 +1,4 @@
-import React,{useState,useContext} from 'react'
-import * as apiauth from '../../api/auth'
+import React,{useState,useContext,useEffect} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility';
@@ -7,8 +6,9 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
-import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
+import {MessageContext,SigninContext} from '../../context/biketrails.context' //
 import Message from '../Message'
+import {registerUser} from '../../actions/signin.actions'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,7 +40,12 @@ export default function Register (props){
     })
 
     // to show the component and switch to Biketrails after successful Register
-    const [open,setOpen] = useState(true)
+    const [open,setOpen] = useState(loggedInUser ? false : true)
+
+    useEffect(() => {
+        loggedInUser ? setOpen(false) : setOpen(true)
+    },[loggedInUser])
+
     console.log('Register open ? ',open)
     // to toggle the Menu
     const [show,setShow] = useState(true)
@@ -59,22 +64,7 @@ export default function Register (props){
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log('hit Register handleSubmit')
-        console.log(user)
-        console.log(loggedInUser)
-        dispatch({type:'REGISTER',user,setMessage,setOpen})
-
-        // apiauth.register(user)
-        // .then(response => {
-        //     if(response.status === 200){
-        //         console.log(response.status, response.data)
-        //         localStorage.setItem('profile',JSON.stringify(response.data))
-        //         history.push('/')
-        //     }
-        // })
-        // .catch(error => {
-        //     console.log(error)
-        // })
+        registerUser(user,setMessage,setOpen,dispatch)
     }
 
     return(

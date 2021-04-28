@@ -1,9 +1,9 @@
 import React,{useContext, useState} from 'react'
 import {useHistory} from 'react-router-dom'
-import * as api from '../../api'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
-import {CommentContext,MessageContext,LogginContext} from '../../context/biketrails.context'
+import {CommentContext,MessageContext,SigninContext} from '../../context/biketrails.context'
+import {createComment, updateComment} from '../../actions/comment.actions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -27,25 +27,20 @@ const useStyles = makeStyles(theme => ({
 
 export default function CommentForm(props){
     const classes = useStyles()
-    const history = useHistory()
-    const {biketrailId,commentId=null,setAction,setCommentAction,setStatus,text='write a comment'} = props;
+    const {biketrailId,commentId=null,setAction,setCommentAction,text='write a comment'} = props;
     const [commentData,setCommentData] = useState(text)
-    const [comment,dispatch] = useContext(CommentContext)
     const [message,setMessage] = useContext(MessageContext)
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
 
     const handleChange = (e) => {
         setCommentData(e.target.value)
     }
 
     const handleSubmit = (e) => {
-        console.log('hit handleSubmit')
-        console.log(commentData)
         e.preventDefault()
 
-        commentId ? 
-            dispatch({type:'UPDATECOMMENT',biketrailId,commentId,commentData,setCommentAction,setMessage,setLoggedInUser,history}) : 
-            dispatch({type:'CREATECOMMENT',biketrailId,commentData,setAction,setMessage,setLoggedInUser,history})
+        !commentId ? 
+        createComment(biketrailId,commentData,setAction,setMessage) : 
+        updateComment(biketrailId,commentId,commentData,setCommentAction,setMessage)
     }
 
     return(
@@ -73,7 +68,7 @@ export default function CommentForm(props){
                     color='primary'
                     onClick={handleSubmit}
                 >
-                    Create
+                    {commentId ? 'Update' : 'Create'}
                 </Button>
             </form>
             </CardContent>

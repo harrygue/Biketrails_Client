@@ -30,7 +30,6 @@ export default function BiketrailMenu({id,setAction}) {
   const handleClose = (option) => {
 
     if(option.target.firstChild){
-      console.log(option.target.firstChild.data)
       setAction(option.target.firstChild.data) // used to redirect to biketrails in biketrail
 
       if(option.target.firstChild.data === 'Delete'){

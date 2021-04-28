@@ -18,5 +18,10 @@ export const successMessages = {
     // biketrails:
     createBiketrailOk: name => `Biketrail ${name} successfully created`,
     updateBiketrailOk: name => `Biketrail ${name} successfully updated`,
-    deleteBiketrailOk: id => `Biketrail ${id} successfully deleted`
+    deleteBiketrailOk: id => `Biketrail ${id} successfully deleted`,
+    createCommentOk: 'new comment created',
+    updateCommentOk: 'Comment updated',
+    deleteCommentOk: 'Comment deleted',
+    addImageOk: 'Image added',
+    deleteImageOk: 'Image deleted'
 }

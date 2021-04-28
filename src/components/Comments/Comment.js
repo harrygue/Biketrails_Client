@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles'
 import {Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import CommentMenu from './CommentMenu'
 import CommentForm from './CommentForm';
-import {LogginContext,MessageContext} from '../../context/biketrails.context'
+import {SigninContext,MessageContext} from '../../context/biketrails.context'
 
 const useStyles = makeStyles(theme => ({
     commentCard: {
@@ -27,9 +27,11 @@ export default function Comment(props){
     const {comment,biketrailId,setStatus} = props
     const classes = useStyles()
     const [selectCommentAction,setCommentAction] = useState(null)
-    console.log(comment)
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
     const [message,setMessage] = useContext(MessageContext)
+    console.log(loggedInUser)
+    console.log(loggedInUser._id)
+    console.log(comment.author.id)
     return (
         <Card className={classes.commentCard}>
             {/* --------------------- EDIT COMMENT ------------------------------------*/}

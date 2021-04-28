@@ -3,10 +3,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import * as api from '../../api'
 import {NavLink} from 'react-router-dom'
-import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {useHistory} from 'react-router-dom'
+import {logoutUser} from '../../actions/signin.actions'
 
 
 const ITEM_HEIGHT = 48;
@@ -18,7 +18,6 @@ export default function BiketrailsAppBarMenu(props) {
   // const [loggedIn,setLoggedIn] = useContext(LogginContext)
   const [loggedIn,dispatch] = useContext(SigninContext)
   const [message,setMessage] = useContext(MessageContext)
-  const history = useHistory()
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,19 +25,7 @@ export default function BiketrailsAppBarMenu(props) {
 
   const handleLogout = (e) => {
     e.preventDefault()
-
-    dispatch({type:'LOGOUT',setMessage,history})
-    console.log(loggedIn)
-    // api.logout()
-    // .then(response => {
-    //   if(response.status === 200){
-    //     console.log(response.data)
-    //     setLoggedIn(false)
-    //     localStorage.clear() //removeItem('profile')
-    //     setMessage('You logged out, see you next time !!!')
-    //     history.push('/')
-    //   }
-    // })
+    logoutUser(setMessage,dispatch)
   }
 
   const handleClose = (option) => {

@@ -11,16 +11,11 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import EditBiketrailForm from './EditBiketrailForm'
 import BiketrailMenu from './BiketrailMenu'
-import {useBiketrailState} from '../../hooks/useBiketrailState'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
 import {PlotMapLeaflet} from '../Plots'
 import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
-import {biketrailActions} from '../../other/actionTypes'
-// import {getBiketrail} from '../../reducers/biketrailReducer'
-import * as api from '../../api'
-import {errorMessages,successMessages} from '../../other/messages'
 import {useHistory} from 'react-router-dom'
 import {fetchBiketrailById} from '../../actions/biketrail.actions'
 
@@ -86,21 +81,10 @@ export default function BikeTrail(props){
     const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
 
     useEffect(() => {
-        console.log(message)
-        console.log(selectAction)
         fetchBiketrailById(id,dispatchBiketrail,setMessage,history)
         // cleanup function to return to biketrail after edit
         return () => { setAction(null) }
     },[message])
-        
-    // console.log('RENDER biketrail id: ',id)
-    // console.log('biketrail.author.id',biketrail && biketrail.author && biketrail.author.id)
-    // console.log('logged user id: ',loggedInUser && loggedInUser._id)
-    // console.log(biketrail.images)
-    // console.log(biketrail.comments)
-    // setMessage('')
-    // console.log('MESSAGE: ',message)
-    // console.log('GPX Filename: ',biketrail.gpxFileName)
 
     const handleExpandClick = () => {
       setExpanded(!expanded);

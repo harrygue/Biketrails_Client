@@ -1,5 +1,4 @@
 import React,{useState,useContext,useEffect} from 'react'
-import * as apiauth from '../../api/auth'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
 import Visibility from '@material-ui/icons/Visibility';
@@ -7,9 +6,9 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import {useHistory} from 'react-router-dom'
-import {LogginContext,MessageContext,SigninContext} from '../../context/biketrails.context' //
+import {MessageContext,SigninContext} from '../../context/biketrails.context' //
 import Message from '../Message'
-import {useToggleState} from '../../hooks/useToggleState'
+import {loginUser} from '../../actions/signin.actions'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -41,7 +40,11 @@ export default function Login (props){
         password:''
     })
 
-    const [open,setOpen] = useState(true)
+    const [open,setOpen] = useState(loggedInUser ? false : true)
+
+    useEffect(() => {
+        loggedInUser ? setOpen(false) : setOpen(true)
+    },[loggedInUser])
 
     console.log('Login open ? ',open)
 
@@ -61,24 +64,7 @@ export default function Login (props){
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log('hit handleSubmit')
-        console.log(user)
-        console.log(message)
-        dispatch({type:'LOGIN',user,setMessage,setOpen})
-        console.log(loggedInUser)
-        // apiauth.login(user)
-        // .then(response => {
-        //     if(response.status === 200){
-        //         console.log(response.data)
-        //         localStorage.setItem('profile',JSON.stringify(response.data))
-        //         setLoggedInUser(localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message)
-        //         setMessage(`Hello ${response.data.message.username}! Welcome back again !`)
-        //         history.push('/')
-        //     }
-        // })
-        // .catch(error => {
-        //     console.log(error)
-        // })
+        loginUser(user,setMessage,setOpen,dispatch)
     }
 
     return (
