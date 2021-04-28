@@ -2,7 +2,6 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {AppBar,Typography} from '@material-ui/core'
 import {NavLink} from 'react-router-dom'
-// import {DisplayContext} from '../context/biketrails.context'
 import bikeicon from '../../iconpictures/bikeicon.PNG';
 import BiketrailsAppBarMenu from './BiketrailsAppBarMenu'
 

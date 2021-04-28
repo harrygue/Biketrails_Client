@@ -3,7 +3,6 @@ import '../../styles/ImageSliderStyles.css'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'; // left
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'; // right
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
-import * as api from '../../api'
 import {useHistory} from 'react-router-dom'
 import {MessageContext} from '../../context/biketrails.context'
 import {deleteImage} from '../../actions/image.actions'

@@ -29,9 +29,9 @@ export default function Comment(props){
     const [selectCommentAction,setCommentAction] = useState(null)
     const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
     const [message,setMessage] = useContext(MessageContext)
-    console.log(loggedInUser)
-    console.log(loggedInUser._id)
-    console.log(comment.author.id)
+    // console.log(loggedInUser)
+    // console.log(loggedInUser._id)
+    // console.log(comment.author.id)
     return (
         <Card className={classes.commentCard}>
             {/* --------------------- EDIT COMMENT ------------------------------------*/}

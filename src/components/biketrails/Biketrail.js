@@ -69,12 +69,10 @@ const useStyles = makeStyles(theme =>({
 
 export default function BikeTrail(props){
     const {id} = props.match.params;
-    // const {message,setMessage} = props;
     const [status,setStatus] = useState(null)
     const classes = useStyles();
     const [message,setMessage] = useContext(MessageContext)
     const history = useHistory()
-
     const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)

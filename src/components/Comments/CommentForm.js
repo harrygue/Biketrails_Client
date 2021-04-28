@@ -1,8 +1,7 @@
 import React,{useContext, useState} from 'react'
-import {useHistory} from 'react-router-dom'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
-import {CommentContext,MessageContext,SigninContext} from '../../context/biketrails.context'
+import {MessageContext} from '../../context/biketrails.context'
 import {createComment, updateComment} from '../../actions/comment.actions'
 
 

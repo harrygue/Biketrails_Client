@@ -1,11 +1,9 @@
-import React,{useState} from 'react'
+import React from 'react'
 import './App.css';
 import Biketrails from './components/biketrails/Biketrails'
-// import {MemoizedBiketrail} from './components/biketrails/Biketrail'
 import Biketrail from './components/biketrails/Biketrail'
 import {Switch,Route} from 'react-router-dom'
 import {Container} from '@material-ui/core'
-// import { makeStyles } from '@material-ui/core/styles';
 import BiketrailForm from './components/biketrails/BiketrailForm';
 import BiketrailsAppBar from './components/biketrails/BiketrailsAppbar'
 import Login from './components/SignIn/Login'

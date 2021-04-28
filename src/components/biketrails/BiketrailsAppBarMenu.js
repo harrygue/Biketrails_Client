@@ -5,7 +5,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {NavLink} from 'react-router-dom'
 import {MessageContext,SigninContext} from '../../context/biketrails.context'
-import {useHistory} from 'react-router-dom'
 import {logoutUser} from '../../actions/signin.actions'
 
 

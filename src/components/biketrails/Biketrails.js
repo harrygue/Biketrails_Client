@@ -1,7 +1,7 @@
 import React,{useContext, useEffect} from 'react';
 import BiketrailCard from './BiketrailCard'
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid,Typography} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import {MessageContext, SigninContext,AllBiketrailsContext} from '../../context/biketrails.context'
 import Message from '../Message'
 import {fetchBiketrails} from '../../actions/biketrail.actions'

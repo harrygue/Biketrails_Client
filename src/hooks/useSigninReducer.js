@@ -1,8 +1,4 @@
-import React,{createContext,useReducer,useState} from 'react'
-
-const init = () => {
-    return localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message
-}
+import {useReducer} from 'react'
 
 export const useSigninReducer = (reducer) => {
     const [state,dispatch] = useReducer(reducer,localStorage.getItem('profile') && JSON.parse(localStorage.getItem('profile')).message)

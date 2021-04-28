@@ -1,8 +1,4 @@
-import React,{createContext,useReducer,useState} from 'react'
-import {useAllBiketrailState} from '../hooks/useAllBiketrailState'
-import {useBiketrailState} from '../hooks/useBiketrailState'
-import {useLoggedInUser} from '../hooks/useLoggedInUser'
-import * as api from '../api'
+import React,{createContext,useState} from 'react'
 import {biketrailReducer} from '../reducers/biketrailReducer'
 import {useBiketrailReducer} from '../hooks/useBiketrailReducer'
 import {allBiketrailReducer} from '../reducers/allBiketrailReducer'
@@ -24,8 +20,6 @@ export const SigninContext = createContext([[],() => {}])
 //https://stackoverflow.com/questions/63381316/how-to-fix-react-context-typeerror-object-is-not-iterable-cannot-read-prope
 
 export function BiketrailsProvider(props){
-    // const [biketrail,setBiketrail] = useBiketrailState(id,status,setStatus)
-    // const [loggedInUser,setLoggedInUser] = useLoggedInUser()
     const [message,setMessage] = useState()
     const [allBiketrails,dispatchAllBiketrails] = useAllBiketrailReducer(allBiketrailReducer)
     const [biketrail,dispatchBiketrail] = useBiketrailReducer(biketrailReducer)

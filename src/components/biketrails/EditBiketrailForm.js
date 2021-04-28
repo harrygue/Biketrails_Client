@@ -42,23 +42,12 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const emptyBT = {
-    name: '',
-    description:'',
-    location:'',
-    category:'',
-    gpxFile:''
-}
 export default function EditBiketrailForm(props){
     const classes = useStyles()
     const history = useHistory()
     const {id,name,description,location,category,gpxFileName,setAction} = props;
-    const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
     const [message,setMessage] = useContext(MessageContext)
-    const [biketrail,dispatch] = useContext(BiketrailContext) // you need to declare the whole array here !
     const bt = {name,description,location,category}
-    const [biketrailId,setBiketrailId] = useState(null)
-    const [open,setOpen] = useState(true)
     const [biketrailData,setBiketrailData] = useState(bt)
     const [gpxFile,setGpxFile] = useState({})
 

@@ -4,8 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import * as api from '../../api'
-import {MessageContext,LogginContext,CommentContext} from '../../context/biketrails.context'
+import {MessageContext} from '../../context/biketrails.context'
 import {deleteComment} from '../../actions/comment.actions'
 
 const options = [
@@ -18,7 +17,6 @@ const ITEM_HEIGHT = 48;
 export default function CommentMenu({biketrailId,commentId,setCommentAction}) {
   const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
-  const [comment,dispatch] = useContext(CommentContext)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
