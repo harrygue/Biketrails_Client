@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://localhost:3001'
+// const url = 'http://localhost:3001'
+const url = 'https://biketrailshg-mvp1.herokuapp.com'
 
 const http = axios.create({
     baseURL: url,
