@@ -46,7 +46,7 @@ export default function Register (props){
         loggedInUser ? setOpen(false) : setOpen(true)
     },[loggedInUser])
 
-    console.log('Register open ? ',open)
+    // console.log('Register open ? ',open)
     // to toggle the Menu
     const [show,setShow] = useState(true)
 

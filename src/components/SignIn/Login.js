@@ -46,7 +46,7 @@ export default function Login (props){
         loggedInUser ? setOpen(false) : setOpen(true)
     },[loggedInUser])
 
-    console.log('Login open ? ',open)
+    // console.log('Login open ? ',open)
 
     const [show,setShow] = useState(false)
 

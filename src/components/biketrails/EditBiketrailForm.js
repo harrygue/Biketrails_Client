@@ -51,15 +51,13 @@ export default function EditBiketrailForm(props){
     const [biketrailData,setBiketrailData] = useState(bt)
     const [gpxFile,setGpxFile] = useState({})
 
-    console.log('EditBiketrailForm: id: ',id)
-
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
-            console.log(e.target.name)
+            //console.log(e.target.name)
             setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
         } else {
-            console.log(e.target.name)
-            console.log(e.target.files[0])
+            // console.log(e.target.name)
+            // console.log(e.target.files[0])
             setGpxFile(e.target.files[0])
         }
 

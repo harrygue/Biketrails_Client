@@ -58,7 +58,7 @@ export default function BiketrailForm(props){
 
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
-            console.log(e.target.name)
+            // console.log(e.target.name)
             setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
         } else {
             console.log(e.target.name)
