@@ -26,9 +26,13 @@
     align-items: center;
     justify-content: center;
     background: #f9f9f9;
+    opacity: 0;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform ease-in .1s;
+    transition: ease-in .3s;
+  }
+  .arrow:hover {
+    opacity: 0.6
   }
   
   .nextArrow {
@@ -47,14 +51,23 @@
     color: rgb(26, 23, 23);
   }
   
+
   .wasteBasket {
+    border-radius: 20%;
     cursor: pointer;
     position: absolute;
-    bottom: 10%;
-    right: 10px;
+    bottom: 15px;
+    right: 15px;
     z-index:999;
+    background-color: #f9f9f9;
     color: rgb(rgb(26, 23, 23));
     font-size: 25px;
+    opacity:0;
+    transition: ease-in 0.3s;
+  }
+
+  .wasteBasket:hover {
+    opacity: 0.8
   }
 
   .fa-arrow-right:before, .fa-arrow-left:before {

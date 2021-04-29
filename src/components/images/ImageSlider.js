@@ -6,6 +6,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useHistory} from 'react-router-dom'
 import {MessageContext} from '../../context/biketrails.context'
 import {deleteImage} from '../../actions/image.actions'
+import Avatar from '@material-ui/core/Avatar';
 
 class ImageSlider extends Component {
     constructor(props) {
