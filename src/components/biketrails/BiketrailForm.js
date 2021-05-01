@@ -2,7 +2,7 @@ import React,{useContext, useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
 import {useHistory,Redirect} from 'react-router-dom'
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {createBiketrail} from '../../actions/biketrail.actions'
 
 
@@ -49,6 +49,7 @@ const emptyBT = {
 
 export default function BiketrailForm(props){
     const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
     const classes = useStyles()
     const history = useHistory()
     const [biketrailData,setBiketrailData] = useState(emptyBT)
@@ -77,7 +78,7 @@ export default function BiketrailForm(props){
         }
         formData.append('gpxFile',gpxFile)
 
-        createBiketrail(formData,setMessage,setOpen,history)
+        createBiketrail(formData,setMessage,setOpen,history,dispatchLoggedInUser)
     }
     
     // add entype for file upload

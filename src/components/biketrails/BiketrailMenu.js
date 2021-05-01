@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {deleteBiketrail} from '../../actions/biketrail.actions'
 
 
@@ -21,6 +21,7 @@ export default function BiketrailMenu({id,setAction}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
+  const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -34,7 +35,7 @@ export default function BiketrailMenu({id,setAction}) {
 
       if(option.target.firstChild.data === 'Delete'){
         alert('Do you really want to delete this item ?')
-        deleteBiketrail(id,setMessage,history)
+        deleteBiketrail(id,setMessage,history,dispatchLoggedInUser)
       }
     } else {
       setAction(null)

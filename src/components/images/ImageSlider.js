@@ -4,7 +4,7 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'; // left
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'; // right
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useHistory} from 'react-router-dom'
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {deleteImage} from '../../actions/image.actions'
 import Avatar from '@material-ui/core/Avatar';
 
@@ -50,6 +50,12 @@ class ImageSlider extends Component {
        return document.querySelector('.slide').clientWidth
     }
   
+    componentDidMount(){
+      setInterval(() => {
+        this.goToNextSlide()
+      },3000)
+    }
+
     render() {
       // console.log(this.props.images)
       return (
@@ -117,12 +123,13 @@ class ImageSlider extends Component {
   const WasteBasket = ({image,biketrail_id}) => {
     const history = useHistory()
     const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
     return (
       <div className="wasteBasket">
         <DeleteOutlinedIcon onClick={
             () => {
               console.log('waste basket',biketrail_id,image._id)
-              deleteImage(biketrail_id,image._id,setMessage,history)
+              deleteImage(biketrail_id,image._id,setMessage,history,dispatchLoggedInUser)
             }
           }/>
       </div>

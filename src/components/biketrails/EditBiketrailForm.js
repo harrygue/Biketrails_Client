@@ -2,10 +2,7 @@ import React,{useState,useContext} from 'react'
 import {useHistory,Redirect} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import {TextField,Button,Typography,Paper,MenuItem} from '@material-ui/core'
-import * as api from '../../api'
-import {LogginContext,MessageContext,BiketrailContext} from '../../context/biketrails.context'
-import {successMessages,errorMessages} from '../../other/messages'
-import {biketrailActions} from '../../other/actionTypes'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {updateBiketrail} from '../../actions/biketrail.actions'
 
 
@@ -47,6 +44,7 @@ export default function EditBiketrailForm(props){
     const history = useHistory()
     const {id,name,description,location,category,gpxFileName,setAction} = props;
     const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
     const bt = {name,description,location,category}
     const [biketrailData,setBiketrailData] = useState(bt)
     const [gpxFile,setGpxFile] = useState({})
@@ -72,7 +70,7 @@ export default function EditBiketrailForm(props){
             }
             gpxFile && formData.append('gpxFile',gpxFile)
             
-            updateBiketrail(id,formData,setMessage,history)
+            updateBiketrail(id,formData,setMessage,history,dispatchLoggedInUser)
     }
 
     return (

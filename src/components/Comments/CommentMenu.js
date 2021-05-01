@@ -4,7 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {deleteComment} from '../../actions/comment.actions'
 
 const options = [
@@ -17,6 +17,7 @@ const ITEM_HEIGHT = 48;
 export default function CommentMenu({biketrailId,commentId,setCommentAction}) {
   const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
+  const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -35,7 +36,7 @@ export default function CommentMenu({biketrailId,commentId,setCommentAction}) {
       if(option.target.firstChild.data === 'Delete Comment'){
         alert('Do you really want to delete this item ?')
         console.log(commentId)
-        deleteComment(biketrailId,commentId,setMessage,history)
+        deleteComment(biketrailId,commentId,setMessage,history,dispatchLoggedInUser)
       }
     } else {
       setCommentAction(null)

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const url = 'http://localhost:3001'
-const url = 'https://biketrailshg-mvp1.herokuapp.com'
+const url = 'http://localhost:3001'
+// const url = 'https://biketrailshg-mvp1.herokuapp.com'
 
 const http = axios.create({
     baseURL: url,
@@ -14,6 +14,7 @@ http.interceptors.request.use((req) => {
     if(localStorage.getItem('profile')){
         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
     }
+    console.log(req)
     return req
 })
 

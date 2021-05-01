@@ -1,7 +1,7 @@
 import React,{useContext, useState} from 'react'
 import {makeStyles} from '@material-ui/core/styles'
 import {Card,CardContent,TextField,Button,Typography} from '@material-ui/core'
-import {MessageContext} from '../../context/biketrails.context'
+import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {createComment, updateComment} from '../../actions/comment.actions'
 
 
@@ -29,6 +29,7 @@ export default function CommentForm(props){
     const {biketrailId,commentId=null,setAction,setCommentAction,text='write a comment'} = props;
     const [commentData,setCommentData] = useState(text)
     const [message,setMessage] = useContext(MessageContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
 
     const handleChange = (e) => {
         setCommentData(e.target.value)
@@ -38,8 +39,8 @@ export default function CommentForm(props){
         e.preventDefault()
 
         !commentId ? 
-        createComment(biketrailId,commentData,setAction,setMessage) : 
-        updateComment(biketrailId,commentId,commentData,setCommentAction,setMessage)
+        createComment(biketrailId,commentData,setAction,setMessage,dispatchLoggedInUser) : 
+        updateComment(biketrailId,commentId,commentData,setCommentAction,setMessage,dispatchLoggedInUser)
     }
 
     return(

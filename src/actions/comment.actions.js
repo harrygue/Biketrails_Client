@@ -1,8 +1,9 @@
+import {signinActions} from '../other/actionTypes'
 import * as api from '../api'
 import {successMessages,errorMessages} from '../other/messages'
 
 // ----------------------- CREATE COMMENT ---------------------------
-export const createComment = ( bt_id, data,setAction,setMessage) => {
+export const createComment = ( bt_id, data,setAction,setMessage,dispatchLoggedInUser) => {
     api.createComment(bt_id,{comment:data})
     .then(response => {
         if(response.status === 201){
@@ -15,6 +16,7 @@ export const createComment = ( bt_id, data,setAction,setMessage) => {
         if(error.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             setMessage('Ups, something went wrong, eventually you have to login again !')
         }
@@ -22,7 +24,7 @@ export const createComment = ( bt_id, data,setAction,setMessage) => {
 }
 
 // ------------------ UPDATE COMMENT -----------------------
-export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage) => {
+export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage,dispatchLoggedInUser) => {
     api.updateComment(bt_id,commentId,{'comment':data})
     .then(response => {
         if(response.status === 200){
@@ -36,6 +38,7 @@ export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage) 
         if(error.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             setMessage('Ups, something went wrong, eventually you have to login again !')
         }
@@ -43,7 +46,7 @@ export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage) 
 }
 
 // ------------------ DELETE COMMENT -----------------------
-export const deleteComment = (bt_id,commentId,setMessage,history) => {
+export const deleteComment = (bt_id,commentId,setMessage,history,dispatchLoggedInUser) => {
     api.deleteComment(bt_id,commentId)
     .then(response => {
       if(response.status === 200){
@@ -55,6 +58,7 @@ export const deleteComment = (bt_id,commentId,setMessage,history) => {
         if(error.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             setMessage('Ups, something went wrong, eventually you have to login again !')
             history.push('/')

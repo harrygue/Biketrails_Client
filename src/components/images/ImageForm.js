@@ -2,7 +2,7 @@ import React,{useState,useContext} from 'react'
 import {Card, CardContent, Typography,TextField, Button} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom'
-import {MessageContext} from '../../context/biketrails.context.js'
+import {MessageContext,SigninContext} from '../../context/biketrails.context.js'
 import {createImage} from '../../actions/image.actions'
 
 
@@ -38,7 +38,7 @@ export default function ImageForm({id}){
     const [image,setImage] = useState(null)
     const [location,setLocation] = useState("")
     const [message,setMessage] = useContext(MessageContext)
-
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
 
 
     const handleSubmit = (e) => {
@@ -46,7 +46,7 @@ export default function ImageForm({id}){
         const formData = new FormData()
         formData.append('location',location)
         formData.append('image',image)
-        createImage(id,formData,setMessage,history)
+        createImage(id,formData,setMessage,history,dispatchLoggedInUser)
     }
 
 

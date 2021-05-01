@@ -6,6 +6,7 @@ import {MessageContext, SigninContext,AllBiketrailsContext} from '../../context/
 import Message from '../Message'
 import {fetchBiketrails} from '../../actions/biketrail.actions'
 import {useHistory} from 'react-router-dom'
+import {Spinner} from '../Spinner'
 
 
 
@@ -43,7 +44,7 @@ export default function Biketrails(props){
             alignItems='stretch' spacing={3}
         >
             <Message />
-            {biketrails && biketrails.length>0 && biketrails.map(biketrail =>
+            {biketrails && biketrails.length>0 ? biketrails.map(biketrail =>
                 <Grid item key={biketrail._id} xs={12} sm={4}>
                     <BiketrailCard
                         id={biketrail._id} 
@@ -55,7 +56,7 @@ export default function Biketrails(props){
                         image={biketrail.images.length >0 && biketrail.images[0].image}
                     />
                 </Grid>
-            )}
+            ) : <Spinner />}
         </Grid>
     )
 }

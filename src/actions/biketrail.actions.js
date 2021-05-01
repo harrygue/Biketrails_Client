@@ -1,4 +1,4 @@
-import {biketrailActions} from '../other/actionTypes'
+import {biketrailActions,signinActions} from '../other/actionTypes'
 import * as api from '../api'
 import {successMessages,errorMessages} from '../other/messages'
 
@@ -26,7 +26,7 @@ export const fetchBiketrailById = async (id,dispatch,setMessage,history) => {
     }
 }
 
-export const createBiketrail = (data,setMessage,setOpen,history) => {
+export const createBiketrail = (data,setMessage,setOpen,history,dispatchLoggedInUser) => {
     api.createBikeTrail(data)
     .then(response => {
         if(response.status === 200){
@@ -39,6 +39,8 @@ export const createBiketrail = (data,setMessage,setOpen,history) => {
         console.log(err)
         if(err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
+            localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             console.log('create biketrail error: else')
             setMessage(errorMessages.createFailure(err.response.data.error.message))
@@ -47,7 +49,7 @@ export const createBiketrail = (data,setMessage,setOpen,history) => {
     })
 }
 
-export const updateBiketrail = (id,data,setMessage,history) => { 
+export const updateBiketrail = (id,data,setMessage,history,dispatchLoggedInUser) => { 
     api.updateBikeTrail(id,data)
     .then(response => {
        if(response.status === 200){
@@ -59,6 +61,8 @@ export const updateBiketrail = (id,data,setMessage,history) => {
         console.log(err)
         if(err.response && err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
+            localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             console.log(err)
             setMessage(errorMessages.updateFailure('Ops, something was wrong!'))
@@ -67,7 +71,7 @@ export const updateBiketrail = (id,data,setMessage,history) => {
     })
 }
 
-export const deleteBiketrail = (id,setMessage,history) => {
+export const deleteBiketrail = (id,setMessage,history,dispatchLoggedInUser) => {
     api.deleteBikeTrail(id)
     .then(response => {
       console.log(response)
@@ -80,6 +84,8 @@ export const deleteBiketrail = (id,setMessage,history) => {
         console.log(err)
         if(err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
+            localStorage.clear()
+            dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             console.log('update biketrail error: else')
             setMessage(errorMessages.generalError)
