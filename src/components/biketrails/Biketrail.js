@@ -18,15 +18,22 @@ import {BiketrailContext,MessageContext,SigninContext} from '../../context/biket
 import Message from '../Message'
 import {useHistory} from 'react-router-dom'
 import {fetchBiketrailById} from '../../actions/biketrail.actions'
-
+import {Spinner} from '../Spinner'
 
 const useStyles = makeStyles(theme =>({
     root: {
         // maxWidth: 645,
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between', // main-axix
         borderRadius: '5px',
+    },
+    imageCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        boderRadius: '5px',
+        margin: '5px'
     },
     commentCard: {
         display: 'flex',
@@ -90,7 +97,7 @@ export default function BikeTrail(props){
 
     return (
         <>
-        {biketrail && <Grid container className={classes.mainContainer}>
+        {biketrail ? <Grid container className={classes.root}>
             { selectAction !== 'Edit' ?
             <>
             <Message />
@@ -101,8 +108,8 @@ export default function BikeTrail(props){
                 </Card>
             </Grid>
             <Grid item xs={12} sm={8}>
-                <Card className={classes.root}>
-                    {biketrail.images && biketrail.images.length >0 && <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/>}
+                <Card className={classes.imageCard}>
+                    {biketrail.images && biketrail.images.length >0 ? <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/> : <Spinner />}
                     <CardContent>
                         <Typography variant='h4'>{biketrail.name}</Typography>
                         <Typography variant='body2'>{biketrail.description}</Typography>
@@ -161,7 +168,7 @@ export default function BikeTrail(props){
                         setAction={setAction}
                     />
         }
-        </Grid>}
+        </Grid> : <Spinner />}
         </>
     )
 }

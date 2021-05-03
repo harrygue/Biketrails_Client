@@ -13,7 +13,7 @@ export const createComment = ( bt_id, data,setAction,setMessage,dispatchLoggedIn
         }
     })
     .catch(error => {
-        if(error.status === 401){
+        if(error.response.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
             dispatchLoggedInUser({type:signinActions.LOGOUT})
@@ -35,7 +35,7 @@ export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage,d
     })
     .catch(error => {
         console.log(error)
-        if(error.status === 401){
+        if(error.response.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
             dispatchLoggedInUser({type:signinActions.LOGOUT})
@@ -55,7 +55,7 @@ export const deleteComment = (bt_id,commentId,setMessage,history,dispatchLoggedI
       }
     })
     .catch(error => {
-        if(error.status === 401){
+        if(error.response.status === 401){
             setMessage(errorMessages.notAuthorized)
             localStorage.clear()
             dispatchLoggedInUser({type:signinActions.LOGOUT})

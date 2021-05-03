@@ -47,6 +47,8 @@ const emptyBT = {
     gpxFile:''
 }
 
+
+
 export default function BiketrailForm(props){
     const [message,setMessage] = useContext(MessageContext)
     const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
@@ -55,11 +57,39 @@ export default function BiketrailForm(props){
     const [biketrailData,setBiketrailData] = useState(emptyBT)
     const [gpxFile,setGpxFile] = useState({})
     const [open,setOpen] = useState(true)
+    const [errorText,setErrorText] = useState(null)
 
+    const handleValidation = (btData) => {
+        let fieldIsValid = true
+        let errors = {}
+        setErrorText(null)
+        console.log(btData['name'])
+        if(!btData['name']){
+            fieldIsValid = false
+            errors['name'] = 'Field required'
+            setErrorText(errors)
+        } else if(!btData['name'].match(/^[a-zA-Z0-9]+$/)){
+            errors['name'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        if(!btData.description.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['description'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        if(!btData.location.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['location'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        
+        console.log(errors)
+        return fieldIsValid
+    }
 
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
-            // console.log(e.target.name)
             setBiketrailData({...biketrailData,[e.target.name]:e.target.value})
         } else {
             console.log(e.target.name)
@@ -69,16 +99,17 @@ export default function BiketrailForm(props){
 
     }
 
-     const handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         console.log(`biketrail data: ${JSON.stringify(biketrailData)}`)
+        
         var formData = new FormData()
         for(let name in biketrailData){
             formData.append(name,biketrailData[name])
         }
         formData.append('gpxFile',gpxFile)
 
-        createBiketrail(formData,setMessage,setOpen,history,dispatchLoggedInUser)
+        handleValidation(biketrailData) && createBiketrail(formData,setMessage,setOpen,history,dispatchLoggedInUser)
     }
     
     // add entype for file upload
@@ -94,6 +125,9 @@ export default function BiketrailForm(props){
                 >
                     <Typography variant='h6'>Create a Biketrail</Typography>
                     <TextField 
+                        error={errorText && errorText['name'] ? true : false}
+                        helperText={errorText && errorText['name']}
+                        required
                         name='name'
                         label='Title'    
                         variant='outlined'
@@ -103,6 +137,8 @@ export default function BiketrailForm(props){
                     />
                     
                     <TextField 
+                        error={errorText && errorText['description'] ? true : false}
+                        helperText={errorText && errorText['description']}
                         name='description'
                         label='Description'
                         variant='outlined'
@@ -111,6 +147,8 @@ export default function BiketrailForm(props){
                         onChange={handleChange}
                     />
                     <TextField 
+                        error={errorText && errorText['location'] ? true : false}
+                        helperText={errorText && errorText['location']}
                         name='location'
                         label='Location'
                         variant='outlined'
@@ -164,7 +202,7 @@ export default function BiketrailForm(props){
                         variant='outlined'
                         size='small'
                         color='secondary'
-                        onClick={() => {setBiketrailData(emptyBT) }}
+                        onClick={() => {setBiketrailData(emptyBT); setErrorText(null) }}
                     >
                         Clear
                     </Button>
