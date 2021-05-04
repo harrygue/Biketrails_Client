@@ -39,6 +39,8 @@ export default function Biketrails(props){
         fetchBiketrails(dispatch,setMessage,history)
     },[message])
 
+    console.log(biketrails)
+
     return (
         <Grid container className={classes.mainContainer}
             alignItems='stretch' spacing={3}

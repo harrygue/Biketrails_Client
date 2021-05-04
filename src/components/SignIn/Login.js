@@ -32,7 +32,6 @@ const useStyles = makeStyles(theme => ({
 export default function Login (props){
     const classes = useStyles()
     const history = useHistory()
-    // const [loggedInUser,setLoggedInUser] = useContext(LogginContext)
     const [loggedInUser,dispatch] = useContext(SigninContext)
     const [message,setMessage] = useContext(MessageContext)
     const [user,setUser] = useState({

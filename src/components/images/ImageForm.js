@@ -39,14 +39,29 @@ export default function ImageForm({id}){
     const [location,setLocation] = useState("")
     const [message,setMessage] = useContext(MessageContext)
     const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
+    const [errorText,setErrorText] = useState(null)
 
+    const handleValidation = (field) => {
+        let fieldIsValid = true
+        let errors = {}
+        setErrorText(null)
+        console.log(field)
+
+        if(!field.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['location'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        
+        return fieldIsValid
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const formData = new FormData()
         formData.append('location',location)
         formData.append('image',image)
-        createImage(id,formData,setMessage,history,dispatchLoggedInUser)
+        handleValidation(location) && createImage(id,formData,setMessage,history,dispatchLoggedInUser)
     }
 
 
@@ -63,6 +78,8 @@ export default function ImageForm({id}){
                 >
                 <Typography variant='h6'>Add an Image</Typography>
                     <TextField 
+                        error={errorText && errorText['location'] ? true : false}
+                        helperText={errorText && errorText['location']}
                         name='location'
                         label='Image Title'    
                         variant='outlined'

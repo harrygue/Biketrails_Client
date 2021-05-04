@@ -48,6 +48,36 @@ export default function EditBiketrailForm(props){
     const bt = {name,description,location,category}
     const [biketrailData,setBiketrailData] = useState(bt)
     const [gpxFile,setGpxFile] = useState({})
+    const [errorText,setErrorText] = useState(null)
+
+    const handleValidation = (btData) => {
+        let fieldIsValid = true
+        let errors = {}
+        setErrorText(null)
+        console.log(btData['name'])
+        if(!btData['name']){
+            fieldIsValid = false
+            errors['name'] = 'Field required'
+            setErrorText(errors)
+        } else if(!btData['name'].match(/^[a-zA-Z0-9]*$/)){
+            errors['name'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        if(!btData.description.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['description'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        if(!btData.location.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['location'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        
+        console.log(errors)
+        return fieldIsValid
+    }
 
     const handleChange = (e) => {
         if(e.target.name !== 'gpx'){
@@ -70,7 +100,7 @@ export default function EditBiketrailForm(props){
             }
             gpxFile && formData.append('gpxFile',gpxFile)
             
-            updateBiketrail(id,formData,setMessage,history,dispatchLoggedInUser)
+            handleValidation(biketrailData) && updateBiketrail(id,formData,setMessage,history,dispatchLoggedInUser)
     }
 
     return (
@@ -85,6 +115,8 @@ export default function EditBiketrailForm(props){
                 >
                     <Typography variant='h6'>Edit a Biketrail</Typography>
                     <TextField 
+                        error={errorText && errorText['name'] ? true : false}
+                        helperText={errorText && errorText['name']}
                         name='name'
                         label='Title'    
                         variant='outlined'
@@ -94,6 +126,8 @@ export default function EditBiketrailForm(props){
                     />
                     
                     <TextField 
+                        error={errorText && errorText['description'] ? true : false}
+                        helperText={errorText && errorText['description']}
                         name='description'
                         label='Description'
                         variant='outlined'
@@ -102,6 +136,8 @@ export default function EditBiketrailForm(props){
                         onChange={handleChange}
                     />
                     <TextField 
+                        error={errorText && errorText['location'] ? true : false}
+                        helperText={errorText && errorText['location']}
                         name='location'
                         label='Location'
                         variant='outlined'

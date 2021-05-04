@@ -30,6 +30,21 @@ export default function CommentForm(props){
     const [commentData,setCommentData] = useState(text)
     const [message,setMessage] = useContext(MessageContext)
     const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
+    const [errorText,setErrorText] = useState(null)
+
+    const handleValidation = (field) => {
+        let fieldIsValid = true
+        let errors = {}
+        setErrorText(null)
+
+        if(!field.match(/^[a-zA-Z0-9\s]*$/)){
+            errors['comment'] = 'only letters and numbers allowed!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        
+        return fieldIsValid
+    }
 
     const handleChange = (e) => {
         setCommentData(e.target.value)
@@ -38,9 +53,11 @@ export default function CommentForm(props){
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        !commentId ? 
-        createComment(biketrailId,commentData,setAction,setMessage,dispatchLoggedInUser) : 
-        updateComment(biketrailId,commentId,commentData,setCommentAction,setMessage,dispatchLoggedInUser)
+        if(handleValidation(commentData)){
+            !commentId ? 
+            createComment(biketrailId,commentData,setAction,setMessage,dispatchLoggedInUser) : 
+            updateComment(biketrailId,commentId,commentData,setCommentAction,setMessage,dispatchLoggedInUser)
+        }
     }
 
     return(
@@ -55,6 +72,8 @@ export default function CommentForm(props){
             >
                 <Typography variant='h6'>{commentId ? 'Edit' : 'Create'} a Comment</Typography>
                 <TextField
+                    error={errorText && errorText['comment'] ? true : false}
+                    helperText={errorText && errorText['comment']}
                     name='comment'
                     label='New Comment'
                     variant='outlined'

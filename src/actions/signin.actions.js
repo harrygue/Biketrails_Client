@@ -33,7 +33,6 @@ export const loginUser = async (userData,setMessage,setOpen,dispatch) => {
                 console.log('user does not exist')
                 setMessage(errorMessages.loginFailure(response.data.message))
             } else {
-                console.log(response.data)
                 localStorage.setItem('profile',JSON.stringify(response.data))
                 setMessage(successMessages.loginOk(response.data.message.username))
                 dispatch({type:signinActions.LOGIN,user:response.data.message})

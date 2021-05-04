@@ -95,6 +95,8 @@ export default function BikeTrail(props){
       setExpanded(!expanded);
     };
 
+    console.log(biketrail ? true : false)
+
     return (
         <>
         {biketrail ? <Grid container className={classes.root}>
@@ -104,7 +106,7 @@ export default function BikeTrail(props){
             <Grid item xs={12} sm={4}>
                 <Card className={classes.sideContainer}>
                     <Typography variant='h5'>{biketrail.name}</Typography>
-                    {biketrail && biketrail.gpxFile && <PlotMapLeaflet gpxFile={biketrail.gpxFile} gpxFileName={biketrail.gpxFileName} lat={biketrail.lat} lng={biketrail.lng}/>}
+                    {biketrail && biketrail.gpxFileName !== '' && <PlotMapLeaflet gpxFile={biketrail.gpxFile} gpxFileName={biketrail.gpxFileName} lat={biketrail.lat} lng={biketrail.lng}/>}
                 </Card>
             </Grid>
             <Grid item xs={12} sm={8}>

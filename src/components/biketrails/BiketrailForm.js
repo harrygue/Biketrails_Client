@@ -68,7 +68,7 @@ export default function BiketrailForm(props){
             fieldIsValid = false
             errors['name'] = 'Field required'
             setErrorText(errors)
-        } else if(!btData['name'].match(/^[a-zA-Z0-9]+$/)){
+        } else if(!btData['name'].match(/^[a-zA-Z0-9]*$/)){
             errors['name'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)
