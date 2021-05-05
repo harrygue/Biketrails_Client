@@ -38,6 +38,7 @@ export default function Login (props){
         username:'',
         password:''
     })
+    const [errorText,setErrorText] = useState(null)
 
     const [open,setOpen] = useState(loggedInUser ? false : true)
 
@@ -57,13 +58,41 @@ export default function Login (props){
         event.preventDefault();
       };
 
+    const handleValidation = (user) => {
+        let fieldIsValid = true
+        let errors = {}
+        setErrorText(null)
+        console.log(user)
+        if(!user['username']){
+            fieldIsValid = false
+            errors['username'] = 'Field required'
+            setErrorText(errors)
+        } else if(!user['username'].match(/^[a-zA-Z0-9]*$/)){
+            errors['username'] = 'only letters and numbers allowed, no whitespace please!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        if(!user['password']){
+            fieldIsValid = false
+            errors['password'] = 'Field required'
+            setErrorText(errors)
+        } else if(!user['password'].match(/^[a-zA-Z0-9]*$/)){
+            errors['password'] = 'only letters and numbers allowed, no whitespace please!'
+            fieldIsValid = false
+            setErrorText(errors)
+        }
+        
+        console.log(errors)
+        return fieldIsValid
+    }
+
     const handleChange = e => {
         setUser({...user,[e.target.name]:e.target.value})
     }
 
     const handleSubmit = e => {
         e.preventDefault()
-        loginUser(user,setMessage,setOpen,dispatch)
+        handleValidation(user) && loginUser(user,setMessage,setOpen,dispatch)
     }
 
     return (
@@ -79,6 +108,8 @@ export default function Login (props){
                     <Typography variant='h5'></Typography>
                     <TextField 
                         required
+                        error={errorText && errorText['username'] ? true : false}
+                        helperText={errorText && errorText['username']}
                         name='username'
                         label='User Name'
                         variant='outlined'
@@ -88,6 +119,8 @@ export default function Login (props){
                     />
                     <TextField 
                         required
+                        error={errorText && errorText['password'] ? true : false}
+                        helperText={errorText && errorText['password']}
                         name='password'
                         label='Password'
                         type={show ? 'text' : 'password'}
