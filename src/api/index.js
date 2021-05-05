@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {token} from '../actions/signin.actions'
+import {setCookie,getCookie} from '../other/cookieActions'
 
 const url = 'http://localhost:3001'
 // const url = 'https://biketrailshg-mvp1.herokuapp.com'
@@ -12,8 +12,13 @@ const http = axios.create({
 })
 
 http.interceptors.request.use((req) => {
-    if(localStorage.getItem('profile')){
-        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    const user = getCookie('user')
+    console.log(user)
+    // if(localStorage.getItem('profile')){
+    //     req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
+    // }
+    if(user){
+        req.headers.Authorization = `Bearer ${JSON.parse(user).token}`
     }
     console.log(req)
     return req
@@ -21,7 +26,7 @@ http.interceptors.request.use((req) => {
 
 const getBikeTrails = () => axios.get(`${url}/biketrails`)
 const getBikeTrail = id => http.get(`/biketrails/${id}`)
-const createBikeTrail = data => http.post(`/biketrails`,data)
+const createBikeTrail = (data,token=null) => http.post(`/biketrails`,data)
 const updateBikeTrail = (id,data) => http.put(`/biketrails/${id}`,data)
 const deleteBikeTrail = id => http.delete(`/biketrails/${id}`)
 

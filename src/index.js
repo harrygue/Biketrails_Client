@@ -6,11 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import 'leaflet/dist/leaflet.css'
 import {BiketrailsProvider} from './context/biketrails.context'
+import { CookiesProvider } from 'react-cookie';
 
 ReactDOM.render(
   <BrowserRouter>
     <BiketrailsProvider>
-      <App />
+      <CookiesProvider>
+        <App />
+      </CookiesProvider>
     </BiketrailsProvider>
   </BrowserRouter>,
   document.getElementById('root')

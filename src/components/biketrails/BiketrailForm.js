@@ -78,7 +78,7 @@ export default function BiketrailForm(props){
             fieldIsValid = false
             setErrorText(errors)
         }
-        if(!btData.location.match(/^[a-zA-Z0-9\s]*$/)){
+        if(!btData.location.match(/^[a-zA-Z0-9\s,]*$/)){
             errors['location'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)

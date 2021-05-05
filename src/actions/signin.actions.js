@@ -1,6 +1,7 @@
 import {signinActions} from '../other/actionTypes'
 import * as apiauth from '../api/auth'
 import {successMessages,errorMessages} from '../other/messages'
+import {setCookie,deleteCookie, getCookie} from '../other/cookieActions'
 
 
 export const registerUser = async (userData,setMessage,setOpen,dispatch) => {
@@ -8,7 +9,8 @@ export const registerUser = async (userData,setMessage,setOpen,dispatch) => {
         const response = await apiauth.register(userData)
         if(response.status === 200){
             console.log(response.status, response.data)
-            localStorage.setItem('profile',JSON.stringify(response.data))
+            // localStorage.setItem('profile',JSON.stringify(response.data))
+            setCookie('user',JSON.stringify(response.data),5)
             setMessage(successMessages.registerOk(response.data.message.username))
             dispatch({type:signinActions.LOGIN,user:response.data.message})
         } 
@@ -33,7 +35,9 @@ export const loginUser = async (userData,setMessage,setOpen,dispatch) => {
                 console.log('user does not exist')
                 setMessage(errorMessages.loginFailure(response.data.message))
             } else {
-                localStorage.setItem('profile',JSON.stringify(response.data))
+                // localStorage.setItem('profile',JSON.stringify(response.data))
+                setCookie('user',JSON.stringify(response.data),5)
+                console.log(getCookie('user'))
                 setMessage(successMessages.loginOk(response.data.message.username))
                 dispatch({type:signinActions.LOGIN,user:response.data.message})
             }
@@ -56,7 +60,8 @@ export const logoutUser = (setMessage,dispatch) => {
     .then(response => {
         if(response.status === 200){
             console.log(response.data)
-            localStorage.clear() //removeItem('profile')
+            //localStorage.clear() //removeItem('profile')
+            deleteCookie('user')
             setMessage(successMessages.logoutOk)
             dispatch({type:signinActions.LOGOUT})
         }

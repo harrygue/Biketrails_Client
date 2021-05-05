@@ -6,6 +6,7 @@ import bikeicon from '../../iconpictures/bikeicon.PNG';
 import BiketrailsAppBarMenu from './BiketrailsAppBarMenu'
 import {AppBarUser} from './AppBarUser'
 import {MessageContext} from '../../context/biketrails.context'
+import {getCookie} from '../../other/cookieActions'
 
 
 
@@ -35,9 +36,12 @@ const useStyles = makeStyles(theme => ({
 export default function BiketrailsAppBar(props){
     const [message,setMessage] = useContext(MessageContext)
     const classes = useStyles()
-    const [user,setUser] = useState(localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')).message.username : null)
+    // const [user,setUser] = useState(localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')).message.username : null)
+    const [user,setUser] = useState(getCookie('user') ? JSON.parse(getCookie('user').message.username) : null)
     useEffect(() => {
-        setUser(localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')).message.username : null)
+        // setUser(localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')).message.username : null)
+        setUser(getCookie('user') ? JSON.parse(getCookie('user').message.username) : null)
+        console.log(user)
     },[user,message])   
     return (
         <AppBar className={classes.appBar} position='static' color='inherit'>

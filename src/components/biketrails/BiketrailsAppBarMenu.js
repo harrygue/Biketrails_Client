@@ -14,9 +14,10 @@ export default function BiketrailsAppBarMenu(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [setAction] = useState(null)
   const open = Boolean(anchorEl);
-  // const [loggedIn,setLoggedIn] = useContext(LogginContext)
   const [loggedIn,dispatch] = useContext(SigninContext)
   const [message,setMessage] = useContext(MessageContext)
+
+  console.log(loggedIn)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

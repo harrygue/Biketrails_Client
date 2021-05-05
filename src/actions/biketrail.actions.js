@@ -1,6 +1,7 @@
 import {biketrailActions,signinActions} from '../other/actionTypes'
 import * as api from '../api'
 import {successMessages,errorMessages} from '../other/messages'
+import {deleteCookie} from '../other/cookieActions'
 
 
 export const fetchBiketrails = async(dispatch,setMessage,history) => {
@@ -39,7 +40,8 @@ export const createBiketrail = (data,setMessage,setOpen,history,dispatchLoggedIn
         console.log(err)
         if(err.response.status === 401){
             setMessage(errorMessages.notAuthorized)
-            localStorage.clear()
+            // localStorage.clear()
+            deleteCookie('user')
             dispatchLoggedInUser({type:signinActions.LOGOUT})
         } else {
             console.log('create biketrail error: else')
