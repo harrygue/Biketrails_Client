@@ -1,17 +1,13 @@
 import React,{useRef,useEffect} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
-
 import getGpxParameters from '../calculations/getGpxParameters';
 import getPlotParameters from '../calculations/getPlotParameters'
-// import togeojson from "@mapbox/togeojson";
-// import { Map,LayerGroup } from 'leaflet';
-// import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
-// eslint-disable-next-line import/no-webpack-loader-syntax
-// import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 
-// mapboxgl.workerClass = MapboxWorker;
-// mapboxgl.accessToken = "pk.eyJ1IjoiaGFycnlndWUiLCJhIjoiY2s2ang1ajlmMDBycjNlcnpudTZsc2toaSJ9.RFqAywgBUzZfnuN_N1TfDA" //'YOUR_MAPBOX_ACCESS_TOKEN';
+// https://github.com/plotly/react-plotly.js/issues/135#issuecomment-500399098
+import createPlotlyComponent from 'react-plotly.js/factory';
+const Plotly = window.Plotly;
+const Plot = createPlotlyComponent(Plotly);
 
 const useStyles = makeStyles(theme => ({
     mapContainer: {
@@ -23,7 +19,6 @@ const useStyles = makeStyles(theme => ({
         // width: '400px'
     }
 }))
-
 
 export function PlotElevation(props){
 
@@ -40,7 +35,7 @@ export function PlotElevation(props){
 
 export function PlotMapLeaflet(props){
     const mapRef = useRef();
-
+    
     const classes = useStyles();
     const {gpxFile,gpxFileName,lat,lng} = props;
     // console.log(gpxFileName,lat,lng)
@@ -51,17 +46,16 @@ export function PlotMapLeaflet(props){
 
     getGpxParameters(gpxFile,gpxFileName,out =>{
         gpxParams = out
-        // console.log('called getGpxParameters')
     })
 
-    const {fileName,jsonObj,sumDist,geoJSONgpx} = gpxParams;
+    const {fileName,jsonObj,sumDist} = gpxParams;
 
     getPlotParameters(fileName,jsonObj,sumDist,out => {
         plotParams = out
         // console.log('called getPlotParameters')
     })
 
-    const {lat_avg, lon_avg, zoom} = plotParams
+    const {lat_avg, lon_avg, zoom,data,layout} = plotParams
 
     // console.log('Plots: ',plotParams)
     // console.log('gpxParams: ',gpxParams.geoJSONgpx)
@@ -87,6 +81,12 @@ export function PlotMapLeaflet(props){
                 zoom={plotParams.zoom}
             />
         </MapContainer>}
+
+        {plotParams && gpxParams && <Plot
+            data={data}
+            layout={layout}
+            config={{displayModeBar: false}}
+        />}
         </React.Fragment>
     )
 }

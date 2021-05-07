@@ -62,7 +62,6 @@ export default function Login (props){
         let fieldIsValid = true
         let errors = {}
         setErrorText(null)
-        console.log(user)
         if(!user['username']){
             fieldIsValid = false
             errors['username'] = 'Field required'
@@ -81,8 +80,6 @@ export default function Login (props){
             fieldIsValid = false
             setErrorText(errors)
         }
-        
-        console.log(errors)
         return fieldIsValid
     }
 

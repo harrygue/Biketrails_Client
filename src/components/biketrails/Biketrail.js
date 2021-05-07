@@ -95,8 +95,6 @@ export default function BikeTrail(props){
       setExpanded(!expanded);
     };
 
-    console.log(biketrail ? true : false)
-
     return (
         <>
         {biketrail ? <Grid container className={classes.root}>

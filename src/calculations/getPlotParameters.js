@@ -96,7 +96,7 @@ export default function getPlotParameters(fileName,jsonObj,sumDist,cb){
 
         // Plotly.newPlot("elevation",data,layout)
         let out = {
-            lat_avg, lon_avg, zoom
+            lat_avg, lon_avg, zoom,data,layout
         }
         cb(out)
     }
