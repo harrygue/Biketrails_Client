@@ -8,6 +8,7 @@ import BiketrailForm from './components/biketrails/BiketrailForm';
 import BiketrailsAppBar from './components/biketrails/BiketrailsAppbar'
 import Login from './components/SignIn/Login'
 import Register from './components/SignIn/Register'
+import Filter from './components/biketrails/Filter'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route exact path='/biketrails/:id' render={(props)=> <Biketrail {...props} />} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/register' component={Register} />
+          <Route exact path='/filter' component={Filter} />
         </Switch>
     </Container>
   );

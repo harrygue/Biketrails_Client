@@ -39,6 +39,21 @@ export default function Biketrails(props){
         fetchBiketrails(dispatch,setMessage,history)
     },[message])
 
+    const getFilteredBiketrails = (biketrails) => {
+        
+        const filter = localStorage.getItem('filter') && JSON.parse(localStorage.getItem('filter'))
+        if(filter.search === '' && filter.category === 'All') return biketrails
+        if(filter.search === '' && filter.category !== 'All'){
+            console.log(`category: ${filter.category}, search: ${filter.search}`)
+            return biketrails.filter(bt => bt.category === filter.category)
+        }
+        if(filter.category === 'All' && filter.search !== ''){
+            console.log(`category: ${filter.category}, search: ${filter.search}`)
+            return biketrails.filter(bt => bt.name.toLowerCase().match(filter.search.toLowerCase()) || bt.description.toLowerCase().match(filter.search.toLowerCase()))
+        }
+        console.log(`category: ${filter.category}, search: ${filter.search}`)
+        return biketrails.filter(bt => (bt.name.toLowerCase().match(filter.search.toLowerCase()) || bt.description.toLowerCase().match(filter.search.toLowerCase())) && bt.category === filter.category)
+    }
     // console.log(biketrails)
 
     return (
@@ -46,7 +61,7 @@ export default function Biketrails(props){
             alignItems='stretch' spacing={3}
         >
             <Message />
-            {biketrails && biketrails.length>0 ? biketrails.map(biketrail =>
+            {biketrails && biketrails.length>0 ? getFilteredBiketrails(biketrails).map(biketrail =>
                 <Grid item key={biketrail._id} xs={12} sm={4}>
                     <BiketrailCard
                         id={biketrail._id} 

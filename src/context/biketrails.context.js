@@ -16,7 +16,6 @@ export const MessageContext = createContext([[],() => {}])
 export const SigninContext = createContext([[],() => {}])
 
 
-
 //https://stackoverflow.com/questions/63381316/how-to-fix-react-context-typeerror-object-is-not-iterable-cannot-read-prope
 
 export function BiketrailsProvider(props){
@@ -43,16 +42,3 @@ export function BiketrailsProvider(props){
 
 }
 
-/*
-return(
-    <BiketrailContext.Provider value={[biketrail,dispatch]}>
-        <CommentContext.Provider value={[comment,dispatchComment]}>
-            <LogginContext.Provider value={[loggedInUser,setLoggedInUser]}>
-                <MessageContext.Provider value={[message,setMessage]}>
-                    {props.children}
-                </MessageContext.Provider>
-            </LogginContext.Provider>
-        </CommentContext.Provider>
-    </BiketrailContext.Provider>
-)
-*/

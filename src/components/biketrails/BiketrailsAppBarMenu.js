@@ -71,6 +71,9 @@ export default function BiketrailsAppBarMenu(props) {
         {loggedIn && <MenuItem>
           <NavLink to='/createBiketrail' style={{textDecoration:'none'}}>Create Biketrail</NavLink>
         </MenuItem>}
+        {<MenuItem>
+          <NavLink to='/filter' style={{textDecoration:'none'}}>Filter</NavLink>
+        </MenuItem>}
 
       </Menu>
     </React.Fragment>
