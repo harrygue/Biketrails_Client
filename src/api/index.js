@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {token} from '../actions/signin.actions'
 
 const url = 'http://localhost:3001'
 // const url = 'https://biketrailshg-mvp1.herokuapp.com'
@@ -15,6 +14,7 @@ http.interceptors.request.use((req) => {
     if(localStorage.getItem('profile')){
         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem('profile')).token}`
     }
+    console.log('app/index')
     return req
 })
 

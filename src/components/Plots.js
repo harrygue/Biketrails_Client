@@ -1,8 +1,8 @@
-import React,{useRef,useEffect} from 'react'
+import React,{useRef} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import getGpxParameters from '../calculations/getGpxParameters';
-import getPlotParameters from '../calculations/getPlotParameters'
+import {Card, CardActions, CardContent, Collapse, Grid, Typography} from '@material-ui/core';
 
 // https://github.com/plotly/react-plotly.js/issues/135#issuecomment-500399098
 import createPlotlyComponent from 'react-plotly.js/factory';
@@ -38,37 +38,28 @@ export function PlotMapLeaflet(props){
     
     const classes = useStyles();
     const {gpxFile,gpxFileName,lat,lng} = props;
-    // console.log(gpxFileName,lat,lng)
-    let gpxParams = null
-    let plotParams = null
 
-    // console.log('RENDER PLOTMAPLEAFLET: ',gpxFileName)
+    let gpxParams = null
 
     getGpxParameters(gpxFile,gpxFileName,out =>{
         gpxParams = out
     })
 
-    const {fileName,jsonObj,sumDist} = gpxParams;
-
-    getPlotParameters(fileName,jsonObj,sumDist,out => {
-        plotParams = out
-        // console.log('called getPlotParameters')
-    })
-
-    const {lat_avg, lon_avg, zoom,data,layout} = plotParams
-
-    // console.log('Plots: ',plotParams)
-    // console.log('gpxParams: ',gpxParams.geoJSONgpx)
-
-    // add key to child component to cause an update
+    const {totalDist,alt,lat_avg, lon_avg, zoom,data,layout,e_min,e_max} = gpxParams;
 
     return(
-        <React.Fragment key={plotParams.zoom}>
-        {plotParams && gpxParams && <MapContainer 
+        
+        <React.Fragment key={zoom}>
+        {/*-------- MAP PLOT ------------*/}
+        <Typography variant='h6'>Total Dist.: {totalDist} km</Typography>
+        <Typography variant='h6'>Latitude / Longitude: {lat} / {lng}</Typography>
+        <Typography variant='h6'>Min/Max Elevation: {e_min} / {e_max} m</Typography>
+        <Typography variant='h6'>Cumulated Altitude: +{alt.pos} / {alt.neg} m</Typography>
+        {gpxParams && <MapContainer 
             
             className={classes.mapContainer} 
-            center={[plotParams.lat_avg, plotParams.lon_avg]} 
-            zoom={plotParams.zoom} 
+            center={[lat_avg, lon_avg]} 
+            zoom={zoom} 
             scrollWheelZoom={false}
         >
             <TileLayer
@@ -78,11 +69,13 @@ export function PlotMapLeaflet(props){
             <GeoJSON 
                 data={gpxParams.geoJSONgpx}
                 pathOptions={{"color": "#6600ff","weight": 5,"opacity": 0.65}}
-                zoom={plotParams.zoom}
+                zoom={zoom}
             />
         </MapContainer>}
-
-        {plotParams && gpxParams && <Plot
+        
+        {/*--------ELEVATION PLOT ------------*/}
+        
+        {gpxParams && <Plot
             data={data}
             layout={layout}
             config={{displayModeBar: false}}
