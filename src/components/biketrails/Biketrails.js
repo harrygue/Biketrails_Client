@@ -42,16 +42,17 @@ export default function Biketrails(props){
     const getFilteredBiketrails = (biketrails) => {
         
         const filter = localStorage.getItem('filter') && JSON.parse(localStorage.getItem('filter'))
+        if(!filter) return biketrails
         if(filter.search === '' && filter.category === 'All') return biketrails
         if(filter.search === '' && filter.category !== 'All'){
-            console.log(`category: ${filter.category}, search: ${filter.search}`)
+            // console.log(`category: ${filter.category}, search: ${filter.search}`)
             return biketrails.filter(bt => bt.category === filter.category)
         }
         if(filter.category === 'All' && filter.search !== ''){
-            console.log(`category: ${filter.category}, search: ${filter.search}`)
+            // console.log(`category: ${filter.category}, search: ${filter.search}`)
             return biketrails.filter(bt => bt.name.toLowerCase().match(filter.search.toLowerCase()) || bt.description.toLowerCase().match(filter.search.toLowerCase()))
         }
-        console.log(`category: ${filter.category}, search: ${filter.search}`)
+        // console.log(`category: ${filter.category}, search: ${filter.search}`)
         return biketrails.filter(bt => (bt.name.toLowerCase().match(filter.search.toLowerCase()) || bt.description.toLowerCase().match(filter.search.toLowerCase())) && bt.category === filter.category)
     }
     // console.log(biketrails)
