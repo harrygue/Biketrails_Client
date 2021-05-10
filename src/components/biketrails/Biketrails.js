@@ -71,6 +71,7 @@ export default function Biketrails(props){
                         discription={biketrail.description}
                         createdAt={biketrail.createdAt}
                         location={biketrail.location}
+                        category={biketrail.category}
                         image={biketrail.images.length >0 && biketrail.images[0].image}
                     />
                 </Grid>

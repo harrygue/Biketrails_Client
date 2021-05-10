@@ -4,6 +4,8 @@ import {Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import CommentMenu from './CommentMenu'
 import CommentForm from './CommentForm';
 import {SigninContext,MessageContext} from '../../context/biketrails.context'
+import Moment from 'react-moment';
+
 
 const useStyles = makeStyles(theme => ({
     commentCard: {
@@ -46,8 +48,8 @@ export default function Comment(props){
             <CardContent>
                 <Typography variant='h6'>{comment.author.userName}</Typography>
                 <div className={comment}>
-                    {!selectCommentAction && <Typography variant='h5'>{comment.text}</Typography>}
-                    <Typography variant='h6'>{comment.createdAt}</Typography>
+                    {!selectCommentAction && <Typography variant='h6'>{comment.text}</Typography>}
+                    <Moment fromNow>{comment.createdAt}</Moment>
                 </div>
             </CardContent>
             <CardActions>

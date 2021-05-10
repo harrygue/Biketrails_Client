@@ -19,6 +19,7 @@ import Message from '../Message'
 import {useHistory} from 'react-router-dom'
 import {fetchBiketrailById} from '../../actions/biketrail.actions'
 import {Spinner} from '../Spinner'
+import Moment from 'react-moment';
 
 const useStyles = makeStyles(theme =>({
     root: {
@@ -113,6 +114,8 @@ export default function BikeTrail(props){
                     <CardContent>
                         <Typography variant='h4'>{biketrail.name}</Typography>
                         <Typography variant='body2'>{biketrail.description}</Typography>
+                        <span variant='body2'>from {biketrail.author.userName}, </span>
+                        <Moment fromNow>{biketrail.createdAt}</Moment>
                     </CardContent>
                     <CardActions>
                         <IconButton aria-label="add to favorites">
