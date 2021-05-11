@@ -71,6 +71,18 @@ export const updateBiketrail = (id,data,setMessage,history,dispatchLoggedInUser)
     })
 }
 
+export const updateBTlikes = (id,likesData,setMessage,dispatchLoggedInUser) => {
+    api.updateBTlikes(id,likesData)
+    .then(response => {
+        console.log(response)
+        setMessage('Thanks !!!')
+    })
+    .catch(err => {
+        console.log(err)
+
+    })
+}
+
 export const deleteBiketrail = (id,setMessage,history,dispatchLoggedInUser) => {
     api.deleteBikeTrail(id)
     .then(response => {

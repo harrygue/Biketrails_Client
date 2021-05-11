@@ -23,6 +23,18 @@ export const createComment = ( bt_id, data,setAction,setMessage,dispatchLoggedIn
     })
 }
 
+// ------------------ UPDATE COMMENT LIKES --------------------
+export const updateCommentLikes = (bt_id,commentId,data,setMessage,dispatchLoggedInUser) => {
+    api.updateCommentLikes(bt_id,commentId,data)
+    .then(response => {
+        console.log(response)
+        setMessage('thanks !!!')
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
 // ------------------ UPDATE COMMENT -----------------------
 export const updateComment = (bt_id,commentId,data,setCommentAction,setMessage,dispatchLoggedInUser) => {
     api.updateComment(bt_id,commentId,{'comment':data})

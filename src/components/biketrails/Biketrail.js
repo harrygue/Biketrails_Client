@@ -17,7 +17,7 @@ import {PlotMapLeaflet} from '../Plots'
 import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 import {useHistory} from 'react-router-dom'
-import {fetchBiketrailById} from '../../actions/biketrail.actions'
+import {fetchBiketrailById,updateBTlikes} from '../../actions/biketrail.actions'
 import {Spinner} from '../Spinner'
 import Moment from 'react-moment';
 
@@ -84,7 +84,7 @@ export default function BikeTrail(props){
     const [biketrail,dispatchBiketrail] = useContext(BiketrailContext)
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
-    const [loggedInUser,dispatchLoggin] = useContext(SigninContext)
+    const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
 
     useEffect(() => {
         fetchBiketrailById(id,dispatchBiketrail,setMessage,history)
@@ -95,6 +95,20 @@ export default function BikeTrail(props){
     const handleExpandClick = () => {
       setExpanded(!expanded);
     };
+
+    // need to be logged in to like
+    // can only like for others trails or comments
+    // can only give one like
+    const handleLikes = (e) => {
+        e.preventDefault()
+        console.log(JSON.parse(localStorage.getItem('profile')).message._id)
+        console.log(biketrail.author.id)
+        if (localStorage.getItem('profile') && biketrail.author.id !== JSON.parse(localStorage.getItem('profile')).message._id &&  !biketrail.likesUserIds.includes(JSON.parse(localStorage.getItem('profile')).message._id)){
+            const newLikes = biketrail.likes ? biketrail.likes+1 : 1
+            const userId = JSON.parse(localStorage.getItem('profile')).message._id
+            updateBTlikes(id,{newLikes,userId},setMessage,dispatchLoggedInUser)
+        }
+    }
 
     return (
         <>
@@ -119,7 +133,8 @@ export default function BikeTrail(props){
                     </CardContent>
                     <CardActions>
                         <IconButton aria-label="add to favorites">
-                           <FavoriteIcon />
+                           <FavoriteIcon onClick={handleLikes}/>
+                           <Typography variant='body2'>{biketrail && biketrail.likes}</Typography>
                         </IconButton>
                         <IconButton aria-label="share">
                            <ShareIcon />
