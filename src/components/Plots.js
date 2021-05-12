@@ -20,18 +20,18 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export function PlotElevation(props){
-
-    const {gpxFile,gpxFilename} = props;
-    const {fileName,jsonObj,sumDist,geoJSONgpx} = getGpxParameters(gpxFile,gpxFilename)
-    // plot(fileName,lat,lng,jsonObj,sumDist,geoJSONgpx)
-    return(
-        <React.Fragment>
-            <h4>Elevation</h4>
-            <div id="elevation"></div>
-        </React.Fragment>
-    )
-}
+// export function PlotElevation(props){
+// 
+//     const {gpxFile,gpxFilename} = props;
+//     const {fileName,jsonObj,sumDist,geoJSONgpx} = getGpxParameters(gpxFile,gpxFilename)
+//     // plot(fileName,lat,lng,jsonObj,sumDist,geoJSONgpx)
+//     return(
+//         <React.Fragment>
+//             <h4>Elevation</h4>
+//             <div id="elevation"></div>
+//         </React.Fragment>
+//     )
+// }
 
 export function PlotMapLeaflet(props){
     const mapRef = useRef();

@@ -84,12 +84,6 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
         e_min = parseFloat(e_min).toFixed(1);
         e_max = parseFloat(e_max).toFixed(1);
 
-        console.log(`Min. / Max. Elevation (m): ${e_min} / ${e_max}`);
-        // document.getElementById("li3").innerText = `Min. / Max. Elevation (m): ${e_min} / ${e_max}`;
-        // $(document).ready(function(){
-        //     $("#li3").text(`Lowest / Highest Elevation: ${e_min} / ${e_max} (meter)`);
-        // });
-
         // CENTER OF MAP
         let lat_min = 100;
         let lat_max = 0;

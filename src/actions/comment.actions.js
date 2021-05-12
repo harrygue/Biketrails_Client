@@ -27,7 +27,7 @@ export const createComment = ( bt_id, data,setAction,setMessage,dispatchLoggedIn
 export const updateCommentLikes = (bt_id,commentId,data,setMessage,dispatchLoggedInUser) => {
     api.updateCommentLikes(bt_id,commentId,data)
     .then(response => {
-        console.log(response)
+        // console.log(response)
         setMessage('thanks !!!')
     })
     .catch(err => {

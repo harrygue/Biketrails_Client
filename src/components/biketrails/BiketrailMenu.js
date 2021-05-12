@@ -11,13 +11,12 @@ import {deleteBiketrail} from '../../actions/biketrail.actions'
 const options = [
   'Edit',
   'Delete',
-  'Add Image',
-  'Create Comment'
+  'Add Image'
 ];
 
 const ITEM_HEIGHT = 48;
 
-export default function BiketrailMenu({id,setAction}) {
+export default function BiketrailMenu({id,setAction,authorId}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory()
   const [message,setMessage] = useContext(MessageContext)
@@ -29,7 +28,6 @@ export default function BiketrailMenu({id,setAction}) {
   };
 
   const handleClose = (option) => {
-
     if(option.target.firstChild){
       setAction(option.target.firstChild.data) // used to redirect to biketrails in biketrail
 
@@ -43,6 +41,11 @@ export default function BiketrailMenu({id,setAction}) {
 
     setAnchorEl(null);
   };
+
+  const handleCreateComment = () => {
+    setAction('Create Comment'); 
+    setAnchorEl(null);
+  }
 
  return (
     <div>
@@ -67,11 +70,12 @@ export default function BiketrailMenu({id,setAction}) {
           },
         }}
       >
-        {options.map((option) => (
+        {authorId === loggedInUser._id && options.map((option) => (
           <MenuItem key={option} onClick={option => handleClose(option)}>
             {option}
           </MenuItem>
         ))}
+        <MenuItem onClick={handleCreateComment}>Create Comment</MenuItem>
       </Menu>
     </div>
   );

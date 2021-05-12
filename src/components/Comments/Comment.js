@@ -40,8 +40,8 @@ export default function Comment(props){
 
     const handleLikes = (e) => {
         e.preventDefault()
-        console.log(JSON.parse(localStorage.getItem('profile')).message._id)
-        console.log(comment.author.id)
+        // console.log(JSON.parse(localStorage.getItem('profile')).message._id)
+        // console.log(comment.author.id)
         if (localStorage.getItem('profile') && comment.author.id !== JSON.parse(localStorage.getItem('profile')).message._id &&  !comment.likesUserIds.includes(JSON.parse(localStorage.getItem('profile')).message._id)){
             const newLikes = comment.likes ? comment.likes+1 : 1
             const userId = JSON.parse(localStorage.getItem('profile')).message._id

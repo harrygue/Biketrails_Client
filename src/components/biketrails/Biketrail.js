@@ -101,8 +101,8 @@ export default function BikeTrail(props){
     // can only give one like
     const handleLikes = (e) => {
         e.preventDefault()
-        console.log(JSON.parse(localStorage.getItem('profile')).message._id)
-        console.log(biketrail.author.id)
+        // console.log(JSON.parse(localStorage.getItem('profile')).message._id)
+        // console.log(biketrail.author.id)
         if (localStorage.getItem('profile') && biketrail.author.id !== JSON.parse(localStorage.getItem('profile')).message._id &&  !biketrail.likesUserIds.includes(JSON.parse(localStorage.getItem('profile')).message._id)){
             const newLikes = biketrail.likes ? biketrail.likes+1 : 1
             const userId = JSON.parse(localStorage.getItem('profile')).message._id
@@ -151,10 +151,12 @@ export default function BikeTrail(props){
                         </IconButton>
 
                         
-                        {/* only show menu if user is authorized */
-                        loggedInUser && biketrail.author && (loggedInUser._id === biketrail.author.id || loggedInUser.isAdmin) && <BiketrailMenu id={id} 
-                            selectAction={selectAction} setAction={setAction}
+                        {/* only show menu items for edit,delete and add image if user is authorized. Show Create Comment also for other logged in users 
+                        */
+                        loggedInUser && biketrail.author && <BiketrailMenu id={id} 
+                            selectAction={selectAction} setAction={setAction} authorId={biketrail.author.id}
                         />}
+                        
                         {selectAction === 'Delete' && props.history.push('/biketrails')}
                         
                     </CardActions>
