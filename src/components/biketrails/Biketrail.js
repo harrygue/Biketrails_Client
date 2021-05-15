@@ -72,8 +72,26 @@ const useStyles = makeStyles(theme =>({
         flexDirection: 'column',
         justifyContent: 'center',
         padding: '10px'
+    },
+    enlarge: {
+        transform: 'ease-in 0.5sec'
     }
 }))
+
+/* use those object to dynamically enlarge GPX Plot - zoom not working yet*/
+const stdPlot = {
+    leftWidth: 4,
+    rightWidth:8,
+    zoomFactor:1,
+    heightFactor:1
+}
+
+const bigPlot = {
+    leftWidth: 8,
+    rightWidth:4,
+    zoomFactor:3,
+    heightFactor:4
+}
 
 export default function BikeTrail(props){
     const {id} = props.match.params;
@@ -85,6 +103,7 @@ export default function BikeTrail(props){
     const [expanded, setExpanded] = useState(false);
     const [selectAction,setAction] = useState(null)
     const [loggedInUser,dispatchLoggedInUser] = useContext(SigninContext)
+    const [plotSize,setPlotSize] = useState(stdPlot)
 
     useEffect(() => {
         fetchBiketrailById(id,dispatchBiketrail,setMessage,history)
@@ -110,19 +129,32 @@ export default function BikeTrail(props){
         }
     }
 
+    const togglePlot = () => {
+        if(plotSize.leftWidth === 4) setPlotSize(bigPlot)
+        if(plotSize.leftWidth === 12) setPlotSize(stdPlot)
+    }
+
     return (
         <>
         {biketrail ? <Grid container className={classes.root}>
             { selectAction !== 'Edit' ?
             <>
             <Message />
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={plotSize.leftWidth} className={classes.enlarge}>
                 <Card className={classes.sideContainer}>
                     <Typography variant='h5'>{biketrail.name}</Typography>
-                    {biketrail && biketrail.gpxFileName !== '' && <PlotMapLeaflet gpxFile={biketrail.gpxFile} gpxFileName={biketrail.gpxFileName} lat={biketrail.lat} lng={biketrail.lng}/>}
+                    {biketrail && biketrail.gpxFileName !== '' && 
+                        <PlotMapLeaflet 
+                            gpxFile={biketrail.gpxFile} 
+                            gpxFileName={biketrail.gpxFileName} 
+                            lat={biketrail.lat} 
+                            lng={biketrail.lng} 
+                            plotSize={plotSize}
+                            togglePlot={togglePlot}
+                        />}
                 </Card>
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={plotSize.rightWidth} className={classes.enlarge}>
                 <Card className={classes.imageCard}>
                     {biketrail.images && biketrail.images.length >0 ? <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/> : <Spinner />}
                     <CardContent>
@@ -151,7 +183,8 @@ export default function BikeTrail(props){
                         </IconButton>
 
                         
-                        {/* only show menu items for edit,delete and add image if user is authorized. Show Create Comment also for other logged in users 
+                        {/* only show menu items for edit,delete and add image if user is authorized. 
+                        Show Create Comment also for other logged in users 
                         */
                         loggedInUser && biketrail.author && <BiketrailMenu id={id} 
                             selectAction={selectAction} setAction={setAction} authorId={biketrail.author.id}
@@ -173,7 +206,7 @@ export default function BikeTrail(props){
                             setStatus={setStatus}
                         />
                         ) : <Typography variant='h2' styles={{color:'blue'}}>Looks pretty empty here !</Typography>}
-                    </Collapse>* 
+                    </Collapse> 
                 </Card>
                 {selectAction === 'Add Image' && <ImageForm id={id} setAction={setAction} setStatus={setStatus}/>}
             </Grid> 

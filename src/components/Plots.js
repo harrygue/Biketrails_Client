@@ -2,23 +2,23 @@ import React,{useRef} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import getGpxParameters from '../calculations/getGpxParameters';
-import {Card, CardActions, CardContent, Collapse, Grid, Typography} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 
 // https://github.com/plotly/react-plotly.js/issues/135#issuecomment-500399098
 import createPlotlyComponent from 'react-plotly.js/factory';
 const Plotly = window.Plotly;
 const Plot = createPlotlyComponent(Plotly);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles({
     mapContainer: {
         display:'flex',
         flexDirection:'column',
         // justifyContent:'center',
         // alignItems:'center',
-        height: '200px',
+        height: props => `${200*props.plotSize.heightFactor}px`,//'200px',
         // width: '400px'
     }
-}))
+})
 
 // export function PlotElevation(props){
 // 
@@ -35,9 +35,8 @@ const useStyles = makeStyles(theme => ({
 
 export function PlotMapLeaflet(props){
     const mapRef = useRef();
-    
-    const classes = useStyles();
-    const {gpxFile,gpxFileName,lat,lng} = props;
+    const {gpxFile,gpxFileName,lat,lng,togglePlot,plotSize} = props;
+    const classes = useStyles(props);
 
     let gpxParams = null
 
@@ -55,12 +54,22 @@ export function PlotMapLeaflet(props){
         <Typography variant='h6'>Latitude / Longitude: {lat} / {lng}</Typography>
         <Typography variant='h6'>Min/Max Elevation: {e_min} / {e_max} m</Typography>
         <Typography variant='h6'>Cumulated Altitude: +{alt.pos} / {alt.neg} m</Typography>
+
+        {/* Button to enlarge and shrink GPX plot not activated yet as not working well. 
+            Continue later ...
+        <Button 
+            variant='outlined'
+            size='small'
+            color='secondary'
+            onClick={togglePlot}
+        >Large</Button>*/}
+
         {gpxParams && <MapContainer 
             
             className={classes.mapContainer} 
             center={[lat_avg, lon_avg]} 
-            zoom={zoom} 
-            scrollWheelZoom={false}
+            zoom={zoom*plotSize.zoomFactor} 
+            scrollWheelZoom={true}
         >
             <TileLayer
               attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
