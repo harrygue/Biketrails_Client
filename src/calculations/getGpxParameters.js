@@ -129,21 +129,22 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
 
         let data = [trace1];
 
-        var layout = {
-            title:'',
-            xaxis: {
-                title: 'Distance [km]',
-                showgrid: true,
-                zeroline: true
-            },
-            yaxis: {
-                title: 'Altitude [m]',
-                showgrid: true,
-                zeroline: true
-            },
-            width: 400,
-            height: 300
-          };
+        // call layout in Plot.js directly
+        // var layout = {
+        //     title:'',
+        //     xaxis: {
+        //         title: 'Distance [km]',
+        //         showgrid: true,
+        //         zeroline: true
+        //     },
+        //     yaxis: {
+        //         title: 'Altitude [m]',
+        //         showgrid: true,
+        //         zeroline: true
+        //     },
+        //     width: 400,
+        //     height: 300
+        //   };
 
         var out = {
             sumDist:sumDist,
@@ -157,7 +158,7 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             lon_avg, 
             zoom,
             data,
-            layout,
+            // layout,
             e_min,
             e_max
         }

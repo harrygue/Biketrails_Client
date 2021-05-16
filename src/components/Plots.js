@@ -1,8 +1,11 @@
-import React,{useRef} from 'react'
+import React,{useEffect, useRef} from 'react'
 import {makeStyles} from '@material-ui/core/styles';
 import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet'
 import getGpxParameters from '../calculations/getGpxParameters';
 import {Button, Typography} from '@material-ui/core';
+import ContainerDimensions from 'react-container-dimensions'
+import ZoomOutMapIcon from '@material-ui/icons/ZoomOutMap';
+import IconButton from '@material-ui/core/IconButton';
 
 // https://github.com/plotly/react-plotly.js/issues/135#issuecomment-500399098
 import createPlotlyComponent from 'react-plotly.js/factory';
@@ -17,6 +20,15 @@ const useStyles = makeStyles({
         // alignItems:'center',
         height: props => `${200*props.plotSize.heightFactor}px`,//'200px',
         // width: '400px'
+        transform: 'height 10s'
+    },
+    zoomOutMap: {
+        display:'flex',
+        flexDirection:'row',
+        alignItems:'end',
+        justifyContent:'end',
+        height:'50px',
+        width:'50px'
     }
 })
 
@@ -33,10 +45,30 @@ const useStyles = makeStyles({
 //     )
 // }
 
+const layout = (f) =>{
+    return {
+        title:'Elevation Profile',
+        xaxis: {
+            title: 'Distance [km]',
+            showgrid: true,
+            zeroline: true
+        },
+        yaxis: {
+            title: 'Altitude [m]',
+            showgrid: true,
+            zeroline: true
+        },
+        width: 400*f,
+        height: 300*f
+      }
+}
+
 export function PlotMapLeaflet(props){
     const mapRef = useRef();
     const {gpxFile,gpxFileName,lat,lng,togglePlot,plotSize} = props;
     const classes = useStyles(props);
+
+    // console.log(props)
 
     let gpxParams = null
 
@@ -44,7 +76,12 @@ export function PlotMapLeaflet(props){
         gpxParams = out
     })
 
-    const {totalDist,alt,lat_avg, lon_avg, zoom,data,layout,e_min,e_max} = gpxParams;
+    useEffect(() => {
+        // console.log(mapRef && mapRef.current && mapRef.current._map.options)
+        window.dispatchEvent(new Event('resize'));  
+    })
+
+    const {totalDist,alt,lat_avg, lon_avg, zoom,data,e_min,e_max} = gpxParams;
 
     return(
         
@@ -57,15 +94,17 @@ export function PlotMapLeaflet(props){
 
         {/* Button to enlarge and shrink GPX plot not activated yet as not working well. 
             Continue later ...
-        <Button 
-            variant='outlined'
-            size='small'
-            color='secondary'
-            onClick={togglePlot}
-        >Large</Button>*/}
+        */}
 
+        <IconButton
+            className={classes.zoomOutMap}
+            onClick={togglePlot}
+        >
+            <ZoomOutMapIcon/>
+        </IconButton>
+
+        <ContainerDimensions>
         {gpxParams && <MapContainer 
-            
             className={classes.mapContainer} 
             center={[lat_avg, lon_avg]} 
             zoom={zoom*plotSize.zoomFactor} 
@@ -76,17 +115,19 @@ export function PlotMapLeaflet(props){
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <GeoJSON 
+                ref={mapRef}
                 data={gpxParams.geoJSONgpx}
                 pathOptions={{"color": "#6600ff","weight": 5,"opacity": 0.65}}
-                zoom={zoom}
+                zoom={zoom*plotSize.zoomFactor}
             />
         </MapContainer>}
+        </ContainerDimensions>
         
         {/*--------ELEVATION PLOT ------------*/}
         
         {gpxParams && <Plot
             data={data}
-            layout={layout}
+            layout={layout(plotSize.f)}
             config={{displayModeBar: false}}
         />}
         </React.Fragment>

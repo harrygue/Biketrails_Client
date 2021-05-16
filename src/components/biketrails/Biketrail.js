@@ -1,5 +1,5 @@
 import React,{useState,useContext, useEffect} from 'react';
-
+import {Link} from 'react-router-dom'
 import Comment from '../Comments/Comment';
 import CommentForm from '../Comments/CommentForm';
 import { makeStyles } from '@material-ui/core/styles';
@@ -83,14 +83,16 @@ const stdPlot = {
     leftWidth: 4,
     rightWidth:8,
     zoomFactor:1,
-    heightFactor:1
+    heightFactor:1,
+    f:1
 }
 
 const bigPlot = {
-    leftWidth: 8,
-    rightWidth:4,
-    zoomFactor:3,
-    heightFactor:4
+    leftWidth: 12,
+    rightWidth:false,
+    zoomFactor:1.5,
+    heightFactor:4,
+    f:3
 }
 
 export default function BikeTrail(props){
@@ -131,7 +133,7 @@ export default function BikeTrail(props){
 
     const togglePlot = () => {
         if(plotSize.leftWidth === 4) setPlotSize(bigPlot)
-        if(plotSize.leftWidth === 12) setPlotSize(stdPlot)
+        if(plotSize.leftWidth > 4) setPlotSize(stdPlot)
     }
 
     return (
@@ -140,7 +142,7 @@ export default function BikeTrail(props){
             { selectAction !== 'Edit' ?
             <>
             <Message />
-            <Grid item xs={12} sm={plotSize.leftWidth} className={classes.enlarge}>
+            <Grid item xs={12} sm={plotSize.leftWidth}>
                 <Card className={classes.sideContainer}>
                     <Typography variant='h5'>{biketrail.name}</Typography>
                     {biketrail && biketrail.gpxFileName !== '' && 
@@ -154,7 +156,7 @@ export default function BikeTrail(props){
                         />}
                 </Card>
             </Grid>
-            <Grid item xs={12} sm={plotSize.rightWidth} className={classes.enlarge}>
+            <Grid item xs={12} sm={plotSize.rightWidth}>
                 <Card className={classes.imageCard}>
                     {biketrail.images && biketrail.images.length >0 ? <MemoizedImageSlider biketrail_id={id} images={biketrail.images}/> : <Spinner />}
                     <CardContent>
