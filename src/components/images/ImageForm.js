@@ -93,7 +93,7 @@ export default function ImageForm({id}){
                         id="contained-button-file"
                         type="file"
                         name='image'
-                        accept="jpg/*"
+                        accept="image/*"
                         onChange={evt => {setImage(evt.target.files[0])}}
                     />
                     <label htmlFor="contained-button-file">
