@@ -128,7 +128,7 @@ export function PlotMapLeaflet(props){
         {gpxParams && <Plot
             data={data}
             layout={layout(plotSize.f)}
-            config={{displayModeBar: false}}
+            config={{displayModeBar: true}}
         />}
         </React.Fragment>
     )
