@@ -3,8 +3,52 @@ const parseString = require("xml2js").parseString;
 const haversine = require('haversine-distance');
 const DOMParser = require('xmldom').DOMParser;
 
+// FLOATING ELEVATION AVERAGE
+const getElevationFloatAvg = (sampleSize,sumDist,elevations) => {
+    console.log(sumDist.length)
+    console.log(elevations.length)
+    let q = []
+    let newElevations = []
+    for (let i = 0; i<sumDist.length;i++){
+        q.push(parseFloat(elevations[i]))
+        if (q.length > sampleSize){
+            q.splice(0,1)
+        }
 
+        const avg = q.reduce((total,el) => total+el)/q.length
+        newElevations.push(avg)
+    }
 
+    return newElevations
+}
+
+// CUMULATED ALTITUDE DIFFERENCE
+const getCumAltDiff = (elevations) => {
+    let negAlt = 0;
+    let posAlt = 0;
+    for(var i=1;i<elevations.length;i++){
+        let alt = elevations[i]-elevations[i-1];
+        if (alt>0){
+            posAlt+=alt;
+        } else {
+            negAlt+=alt;
+        }
+    }
+    return {pos:posAlt.toFixed(0),neg:negAlt.toFixed(0)};
+}
+
+// MIN AND MAX ELEVATION
+const getMinAndMaxElevation = (elevations) => {
+    var e_min = 10000;
+    var e_max = 0;
+    elevations.forEach(e => {
+        e_min = e < e_min ? e : e_min;
+        e_max = e >= e_max ? e : e_max;
+    });
+    e_min = parseFloat(e_min).toFixed(1);
+    e_max = parseFloat(e_max).toFixed(1);
+    return {e_min,e_max}
+}
 
 export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
     let file = BTgpxFile;// result.finalFile.file; //buff.toString('ascii');
@@ -60,29 +104,20 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             totalDist+=dist;
         });
 
+        // plug in floating average of elevations
+        const sampleSize = 50
+        const avgElevations = getElevationFloatAvg(sampleSize,sumDist,elevations)
+
+
         // CUMULATED ALTITUDE DIFFERENCE
-        let negAlt = 0;
-        let posAlt = 0;
-        for(var i=1;i<elevations.length;i++){
-            let alt = elevations[i]-elevations[i-1];
-            if (alt>0){
-                posAlt+=alt;
-            } else {
-                negAlt+=alt;
-            }
-        }
-        let alt = {pos:posAlt.toFixed(0),neg:negAlt.toFixed(0)};
+        const alt = getCumAltDiff(elevations)
+        const altFromAvgElevations = getCumAltDiff(avgElevations)
+
         let totalDistRound = (parseFloat(totalDist)/1000).toFixed(1)
 
         // MIN AND MAX ELEVATION
-        var e_min = 10000;
-        var e_max = 0;
-        elevations.forEach(e => {
-            e_min = e < e_min ? e : e_min;
-            e_max = e >= e_max ? e : e_max;
-        });
-        e_min = parseFloat(e_min).toFixed(1);
-        e_max = parseFloat(e_max).toFixed(1);
+        const eMinMax = getMinAndMaxElevation(elevations)
+        const eMinMaxFromAvgElevations = getMinAndMaxElevation(avgElevations)
 
         // CENTER OF MAP
         let lat_min = 100;
@@ -126,41 +161,40 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
                 width: 3
             }
         };
+        let trace2 = {
+            x: sumDist,
+            y: avgElevations,
+            mode: "lines",
+            name: `filtered Elevation (${sampleSize} Samples)`,
+            line: {
+                color: 'rgb(245, 66, 114)',
+                width: 3,
+                dash:'dash'
+            }
+        };
 
-        let data = [trace1];
+        let data = [trace1,trace2];
 
-        // call layout in Plot.js directly
-        // var layout = {
-        //     title:'',
-        //     xaxis: {
-        //         title: 'Distance [km]',
-        //         showgrid: true,
-        //         zeroline: true
-        //     },
-        //     yaxis: {
-        //         title: 'Altitude [m]',
-        //         showgrid: true,
-        //         zeroline: true
-        //     },
-        //     width: 400,
-        //     height: 300
-        //   };
+        console.log('in getGpxParameters')
+        console.log(alt)
+        console.log('Alt from avgElevations: ',altFromAvgElevations)
+        console.log(eMinMax)
+        console.log('eMInMax from avgElevations',eMinMaxFromAvgElevations)
 
         var out = {
-            sumDist:sumDist,
+            sumDist,
             totalDist:totalDistRound, 
-            alt:alt,
-            positionAvg:positionAvg,
-            jsonObj:jsonObj, 
-            geoJSONgpx:geoJSONgpx,
-            fileName:fileName,
+            alt:altFromAvgElevations,
+            positionAvg,
+            jsonObj, 
+            geoJSONgpx,
+            fileName,
             lat_avg, 
             lon_avg, 
             zoom,
             data,
-            // layout,
-            e_min,
-            e_max
+            e_min:eMinMax.e_min,
+            e_max:eMinMax.e_max
         }
         cb(out)
 
