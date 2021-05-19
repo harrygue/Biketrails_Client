@@ -49,12 +49,12 @@ const layout = (f) =>{
     return {
         title:'Elevation Profile',
         showlegend: true,
-        // legend: {
-        //   x: 1,
-        //   xanchor: 'right',
-        //   y: 1
-        // },
-        legend:{'orientation':'h'},
+        legend: {
+          x: 1,
+          xanchor: 'right',
+          y: -1.0
+        },
+        // legend:{'orientation':'h'},
         xaxis: {
             title: 'Distance [km]',
             showgrid: true,

@@ -3,10 +3,45 @@ const parseString = require("xml2js").parseString;
 const haversine = require('haversine-distance');
 const DOMParser = require('xmldom').DOMParser;
 
+/* ENVELOP ABOVE MAX POINTS OF ELEVATION PROFILE
+use same sample size as in float avg
+look for max within thin sample span
+attribute the max to the end of the sample span
+interpolate all point in the sample span between the start point (actual value)
+and end point with the max from the sample span
+this is then the start point for the next sample span
+*/
+const getEnvelopElevationProfile = (sampleSize,elevations) => {
+    let q = []
+    let slope = 1
+    let newElevations = []
+    for(let i = 0; i < elevations.length;i++){
+        // calculate envelope
+        q.push(parseFloat(elevations[i]))
+        let max = undefined
+        let min = undefined
+        let start = null
+        if(q.length  === sampleSize){
+            max = Math.max(...q)
+            min = Math.min(...q)
+            start = newElevations.length > 0 && newElevations[newElevations.length - 1] > q[0] ? newElevations[newElevations.length - 1] : q[0]
+
+            // interpolate between start and max
+            let interpolatedElevation = null
+            for (let j = 0; j < q.length; j++){
+                interpolatedElevation = (max - start) / sampleSize * j + start
+                newElevations.push(interpolatedElevation)
+            }
+
+            q = [] // reset q if sampleSize reached and max obtained
+        }
+
+    }
+    return newElevations
+}
+
 // FLOATING ELEVATION AVERAGE
 const getElevationFloatAvg = (sampleSize,sumDist,elevations) => {
-    console.log(sumDist.length)
-    console.log(elevations.length)
     let q = []
     let newElevations = []
     for (let i = 0; i<sumDist.length;i++){
@@ -105,13 +140,16 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
         });
 
         // plug in floating average of elevations
-        const sampleSize = 50
+        const sampleSize = 40
         const avgElevations = getElevationFloatAvg(sampleSize,sumDist,elevations)
+        const sampleSize2 = 20
+        const envelopeElevations = getEnvelopElevationProfile(sampleSize2,elevations,avgElevations)
 
 
         // CUMULATED ALTITUDE DIFFERENCE
         const alt = getCumAltDiff(elevations)
         const altFromAvgElevations = getCumAltDiff(avgElevations)
+        const altFromEnvelopeElevations = getCumAltDiff(envelopeElevations)
 
         let totalDistRound = (parseFloat(totalDist)/1000).toFixed(1)
 
@@ -173,18 +211,31 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             }
         };
 
-        let data = [trace1,trace2];
+        let trace3 = {
+            x: sumDist,
+            y: envelopeElevations,
+            mode: "lines",
+            name: `envelopped Elevation (${sampleSize2} Samples)`,
+            line: {
+                color: 'rgb(245, 66, 114)', // 'rgb(57, 252, 3)',
+                width: 3,
+                dash:'line'
+            }
+        };
+
+        let data = [trace3]// [trace1,trace2,trace3];
 
         console.log('in getGpxParameters')
         console.log(alt)
         console.log('Alt from avgElevations: ',altFromAvgElevations)
+        console.log('Alt from envelopeElevations: ',altFromEnvelopeElevations)
         console.log(eMinMax)
         console.log('eMInMax from avgElevations',eMinMaxFromAvgElevations)
 
         var out = {
             sumDist,
             totalDist:totalDistRound, 
-            alt:altFromAvgElevations,
+            alt:altFromEnvelopeElevations, //altFromAvgElevations,
             positionAvg,
             jsonObj, 
             geoJSONgpx,
