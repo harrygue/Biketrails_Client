@@ -19,6 +19,7 @@ export const fetchBiketrails = async(dispatch,setMessage,history) => {
 export const fetchBiketrailById = async (id,dispatch,setMessage,history) => {
     try {
         const response = await api.getBikeTrail(id)
+        console.log(response.data.biketrail)
         dispatch({type:biketrailActions.GETBYID,biketrail:response.data.biketrail})
     } catch(error){
         setMessage("Ops, something went wrong !")

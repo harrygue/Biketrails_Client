@@ -225,12 +225,12 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
 
         let data = [trace3]// [trace1,trace2,trace3];
 
-        console.log('in getGpxParameters')
-        console.log(alt)
-        console.log('Alt from avgElevations: ',altFromAvgElevations)
-        console.log('Alt from envelopeElevations: ',altFromEnvelopeElevations)
-        console.log(eMinMax)
-        console.log('eMInMax from avgElevations',eMinMaxFromAvgElevations)
+        // console.log('in getGpxParameters')
+        // console.log(alt)
+        // console.log('Alt from avgElevations: ',altFromAvgElevations)
+        // console.log('Alt from envelopeElevations: ',altFromEnvelopeElevations)
+        // console.log(eMinMax)
+        // console.log('eMInMax from avgElevations',eMinMaxFromAvgElevations)
 
         var out = {
             sumDist,
