@@ -47,7 +47,7 @@ export default function ImageForm({id}){
         setErrorText(null)
         console.log(field)
 
-        if(!field.match(/^[a-zA-Z0-9\s]*$/)){
+        if(!field.match(/^[a-zäöüéèàêÄÖÜA-Z0-9\s\,\.\;\:\-\(\)\!\?]*$/)){
             errors['location'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)

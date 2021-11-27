@@ -13,7 +13,9 @@ import EditBiketrailForm from './EditBiketrailForm'
 import BiketrailMenu from './BiketrailMenu'
 import {MemoizedImageSlider} from '../images/ImageSlider'
 import ImageForm from '../images/ImageForm'
-import {PlotMapLeaflet} from '../Plots'
+import {PlotMapLeaflet} from '../plots/Plots'
+import { ElevationPlot } from '../plots/ElevationPlot';
+import { SpeedPlot } from '../plots/SpeedPlot';
 import {BiketrailContext,MessageContext,SigninContext} from '../../context/biketrails.context'
 import Message from '../Message'
 import {useHistory} from 'react-router-dom'
@@ -154,6 +156,24 @@ export default function BikeTrail(props){
                             plotSize={plotSize}
                             togglePlot={togglePlot}
                         />}
+                </Card>
+                <Card className={classes.sideContainer}>
+                    {biketrail && biketrail.gpxFileName !== '' && 
+                        <ElevationPlot 
+                            gpxFile={biketrail.gpxFile} 
+                            gpxFileName={biketrail.gpxFileName}
+                            plotSize={plotSize}
+                        />
+                    }
+                </Card>
+                <Card className={classes.sideContainer}>
+                    {biketrail && biketrail.gpxFileName !== '' && 
+                        <SpeedPlot 
+                            gpxFile={biketrail.gpxFile} 
+                            gpxFileName={biketrail.gpxFileName}
+                            plotSize={plotSize}
+                        />
+                    }
                 </Card>
             </Grid>
             <Grid item xs={12} sm={plotSize.rightWidth}>

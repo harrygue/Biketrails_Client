@@ -103,7 +103,10 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
         let elevations = [];
         let coordinates = [];
         let coordinatesDict = [];
-        let distances = []
+        let distances = [];
+        let timestamps = [];
+        let speedpoints =  [];
+        let inclinationPoints = []; // Neigung/Steigung
         let trkPts = jsonObj.gpx.trk[0].trkseg[0].trkpt;
         let latavg = 0;
         let lngavg = 0;
@@ -111,6 +114,7 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             elevations.push(tp.ele[0]);
             coordinates.push([tp.$.lat,tp.$.lon]);
             coordinatesDict.push(tp.$);
+            timestamps.push(tp.time[0]);
             // calculate sum of latitude and longitude
             latavg += tp.$.lat;
             lngavg += tp.$.lon;
@@ -128,7 +132,7 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             var b = coordinatesDict[i-1];
             distances.push(haversine(a,b));
         }
-        let sumDist = [distances[0]/1000];
+        let sumDist = [distances[0]/1000]; // km
         for (var i=0;i<distances.length;i++){
             sumDist.push(sumDist[i]+distances[i]/1000);
         }
@@ -138,6 +142,13 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
         distances.forEach((dist) => {
             totalDist+=dist;
         });
+
+        // calculate speed
+        for (var i=1;i<timestamps.length;i++){
+            const timeDifference = (Date.parse(timestamps[i]) - Date.parse(timestamps[i-1]))/1000
+            const speed = distances[i-1]/timeDifference * 3.6 // km/h = 3.6 m/s
+            speedpoints.push(speed);
+        }
 
         // plug in floating average of elevations
         const sampleSize = 40
@@ -156,6 +167,12 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
         // MIN AND MAX ELEVATION
         const eMinMax = getMinAndMaxElevation(elevations)
         const eMinMaxFromAvgElevations = getMinAndMaxElevation(avgElevations)
+
+        // INCLINATION / STEIGUNG in %
+        for(var i=1;i<envelopeElevations.length;i++){
+          const ip = (envelopeElevations[i] - envelopeElevations[i-1]) / (distances[i] - distances[i - 1]) * 100
+          inclinationPoints.push(ip)
+        }
 
         // CENTER OF MAP
         let lat_min = 100;
@@ -189,49 +206,6 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             "opacity": 0.65
         };
 
-        let trace1 = {
-            x: sumDist,
-            y: elevations,
-            mode: "lines",
-            name: "Elevation",
-            line: {
-                color: 'rgb(55, 128, 191)',
-                width: 3
-            }
-        };
-        let trace2 = {
-            x: sumDist,
-            y: avgElevations,
-            mode: "lines",
-            name: `filtered Elevation (${sampleSize} Samples)`,
-            line: {
-                color: 'rgb(245, 66, 114)',
-                width: 3,
-                dash:'dash'
-            }
-        };
-
-        let trace3 = {
-            x: sumDist,
-            y: envelopeElevations,
-            mode: "lines",
-            name: `envelopped Elevation (${sampleSize2} Samples)`,
-            line: {
-                color: 'rgb(245, 66, 114)', // 'rgb(57, 252, 3)',
-                width: 3,
-                dash:'line'
-            }
-        };
-
-        let data = [trace3]// [trace1,trace2,trace3];
-
-        // console.log('in getGpxParameters')
-        // console.log(alt)
-        // console.log('Alt from avgElevations: ',altFromAvgElevations)
-        // console.log('Alt from envelopeElevations: ',altFromEnvelopeElevations)
-        // console.log(eMinMax)
-        // console.log('eMInMax from avgElevations',eMinMaxFromAvgElevations)
-
         var out = {
             sumDist,
             totalDist:totalDistRound, 
@@ -243,9 +217,16 @@ export default function getGpxParameters(BTgpxFile,BTgpxFileName,cb){
             lat_avg, 
             lon_avg, 
             zoom,
-            data,
+            speedpoints,
             e_min:eMinMax.e_min,
-            e_max:eMinMax.e_max
+            e_max:eMinMax.e_max,
+            coordinates, // for testing with polyline in Leaflet
+            elevations,
+            envelopeElevations,
+            avgElevations,
+            sampleSize, // see elevation calculation
+            sampleSize2,
+            inclinationPoints
         }
         cb(out)
 

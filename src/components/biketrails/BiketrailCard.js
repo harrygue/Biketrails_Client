@@ -50,6 +50,7 @@ const useStyles = makeStyles(theme => ({
     },
     title: {
       padding: '0 16px',
+      textDecoration: 'none'
     },
     cardActions: {
       padding: '0 16px 8px 16px',
@@ -88,7 +89,7 @@ const SportIcon = ({category}) => {
 }
 
 export default function BikeTrailCard(props){
-    const {name,id,author,createdAt,description,image,category} = props;
+    const {name,id,author,createdAt,description,image,category,location} = props;
     const classes = useStyles();
     // console.log('RENDER BIKETRAIL CARD ',id)
 
@@ -105,9 +106,11 @@ export default function BikeTrailCard(props){
             <div className={classes.overlay2}>
                 <Link to={`/biketrails/${id}` } style={{color: 'white'}} ><SportIcon fontSize='default' category={category}/></Link>
             </div>
-            <Typography className={classes.title}  variant='h5' gutterBottom>{name}</Typography>
+            <Link to={`/biketrails/${id}` } className={classes.title} >
+                <Typography variant='h5' gutterBottom>{name}</Typography>
+            </Link>
             <CardContent>
-                <Typography>{name}</Typography>
+                <Typography>{location}</Typography>
             </CardContent>
             <CardActions>
 

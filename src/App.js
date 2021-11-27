@@ -9,7 +9,7 @@ import BiketrailsAppBar from './components/biketrails/BiketrailsAppbar'
 import Login from './components/SignIn/Login'
 import Register from './components/SignIn/Register'
 import Filter from './components/biketrails/Filter'
-import { PlotMapLeaflet } from './components/Plots';
+
 
 
 function App() {

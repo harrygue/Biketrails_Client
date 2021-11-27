@@ -37,7 +37,7 @@ export default function CommentForm(props){
         let errors = {}
         setErrorText(null)
 
-        if(!field.match(/^[a-zA-Z0-9\s]*$/)){
+        if(!field.match(/^[a-zäöüéèàêÄÖÜA-Z0-9\s\,\.\;\:\-\(\)\!\?]*$/)){
             errors['comment'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)

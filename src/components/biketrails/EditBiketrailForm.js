@@ -59,17 +59,17 @@ export default function EditBiketrailForm(props){
             fieldIsValid = false
             errors['name'] = 'Field required'
             setErrorText(errors)
-        } else if(!btData['name'].match(/^[a-zA-Z0-9\s]*$/)){
+        } else if(!btData['name'].match(/^[a-zäöüéèàêÄÖÜA-Z0-9\s\,\.\;\:\-\(\)\!\?]*$/)){
             errors['name'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)
         }
-        if(!btData.description.match(/^[a-zA-Z0-9\s]*$/)){
+        if(!btData.description.match(/^[a-zäöüéèàêÄÖÜA-Z0-9\s\,\.\;\:\-\(\)\!\?]*$/)){
             errors['description'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)
         }
-        if(!btData.location.match(/^[a-zA-Z0-9\s,]*$/)){
+        if(!btData.location.match(/^[a-zäöüéèàêÄÖÜA-Z0-9\s\,\.\;\:\-\(\)\!\?]*$/)){
             errors['location'] = 'only letters and numbers allowed!'
             fieldIsValid = false
             setErrorText(errors)

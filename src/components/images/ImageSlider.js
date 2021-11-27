@@ -6,7 +6,7 @@ import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined';
 import {useHistory} from 'react-router-dom'
 import {MessageContext,SigninContext} from '../../context/biketrails.context'
 import {deleteImage} from '../../actions/image.actions'
-import Avatar from '@material-ui/core/Avatar';
+import {Typography} from '@material-ui/core';
 
 class ImageSlider extends Component {
     constructor(props) {
@@ -57,7 +57,7 @@ class ImageSlider extends Component {
     }
 
     render() {
-      // console.log(this.props.images)
+      // console.log(this.props.images[0].location)
       return (
         <div className="slider">
   
@@ -71,11 +71,14 @@ class ImageSlider extends Component {
                 this.props.images.map((image, i) => (
                   <>
                     <Slide key={i} image={image}/>
+                    
                   </>
                 ))
               }
           </div>
-  
+
+          <ImageText image={this.props.images[this.state.currentIndex]} />
+
           <LeftArrow
            goToPrevSlide={this.goToPrevSlide}
           />
@@ -89,9 +92,16 @@ class ImageSlider extends Component {
     }
   }
   
+  const ImageText = (props) => {
+    const {location} = props.image;
+
+    return (<div className="location">
+      <Typography >{location}</Typography >
+    </div>)
+  }
   
   const Slide = (props) => {
-    const {image} = props.image
+    const {image,location} = props.image
     const styles = {
       backgroundImage: `url(${image})`,
       backgroundSize: 'cover',
@@ -99,7 +109,8 @@ class ImageSlider extends Component {
       backgroundPosition: '50% 60%'
     }
     return (
-      <div className="slide" style={styles}></div>
+      <div className="slide" style={styles}>
+      </div>
     )
   }
   
